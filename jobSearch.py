@@ -4,8 +4,10 @@ import os
 import json
 import pandas as pd
 import sqlalchemy as sqla
+from datetime import datetime as dt
 
 load_dotenv()
+
 
 def collect_jobs() -> list:
     """
@@ -65,6 +67,7 @@ def clean(data:str) -> pd.DataFrame:
     
     related_links = pd.Series(rel_links).apply(pd.Series) # Converting "link" and "text" series back to df
     jobs_clean = (pd.concat([jobs.drop(["detected_extensions", "related_links"], axis=1), detected_extensions, related_links], axis=1)).astype(str) # Recombining all cols
+    jobs_clean["dateAdded"] = dt.date(dt.now())
     
     return jobs_clean
     
