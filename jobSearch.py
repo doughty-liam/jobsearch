@@ -48,9 +48,9 @@ def append_json(data:dict) -> None:
 
 def clean(data:str) -> pd.DataFrame:
     """Clean up job listings in json string format to be appended to database table."""
-
+    
     jobs = pd.read_json(data)
-    jobs.drop(["extensions", "job_highlights", "thumbnail"], axis=1, inplace=True) # Removing unecessary columns
+    # jobs.drop(["extensions", "job_highlights", "thumbnail"], axis=1, inplace=True) # Removing unecessary columns
     detected_extensions = jobs["detected_extensions"].apply(pd.Series) # Splitting json formatted column of objects into a pandas series
     related_links = jobs["related_links"].apply(pd.Series)
 
@@ -67,6 +67,7 @@ def clean(data:str) -> pd.DataFrame:
     
     related_links = pd.Series(rel_links).apply(pd.Series) # Converting "link" and "text" series back to df
     jobs_clean = (pd.concat([jobs.drop(["detected_extensions", "related_links"], axis=1), detected_extensions, related_links], axis=1)).astype(str) # Recombining all cols
+    jobs_clean = jobs_clean[["title", "company_name", "location", "via", "description", "job_id", "posted_at", "schedule_type", "link", "text"]]
     jobs_clean["dateAdded"] = dt.date(dt.now())
     
     return jobs_clean
