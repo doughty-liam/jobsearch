@@ -69,6 +69,7 @@ def clean(data:str) -> pd.DataFrame:
     jobs_clean = (pd.concat([jobs.drop(["detected_extensions", "related_links"], axis=1), detected_extensions, related_links], axis=1)).astype(str) # Recombining all cols
     jobs_clean = jobs_clean[["title", "company_name", "location", "via", "description", "job_id", "posted_at", "schedule_type", "link", "text"]]
     jobs_clean["dateAdded"] = dt.date(dt.now())
+    jobs_clean["applied"] = False
     
     return jobs_clean
     
