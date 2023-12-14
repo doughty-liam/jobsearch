@@ -1,47 +1,58 @@
 <template>
-    <div id="jobPosting">
-        <h2 id="title">Software Engineer Intern</h2>
-        <h5 id="location">Toronto</h5>
-        <p id="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, vel rerum officia cumque nemo quia molestias pariatur vitae similique nisi, sit totam debitis corporis. Necessitatibus vel ab error sit ullam.</p>
-    </div>
+    <li id="jobPosting">
+        <h2 id="title">{{ title }}</h2>
+        <h5 id="location">{{ location }}</h5>
+        <p id="description">{{ description }}</p>
+    </li>
 </template>
 
 <script>
-    export default {}
+    export default {
+        props: {
+            title: {required: true, type: String},
+            location: {required: true, type: String},
+            description: {required: true, type: String}
+        }
+    }
 </script>
 
 <style scoped>
 
     #jobPosting {
-        width: 40%;
+        width: 100%;
         height: 120px;
         display: grid;
         grid-template-rows: 30% 20% 50%;
         align-items: center;
+        background-color: #ffffff;
 
-        border-radius: 5px;
+        border-radius: 8px;
         overflow: hidden;
     }
 
+    #jobPosting:hover {
+        background-color: #eaeaea;
+    }
+
     #title {
-        background-color: #ffffff;
+        background-color: transparent;
         color: #2a2a2f;
         height: 100%;
         text-align: left;
         padding-left: 5px;
+        padding-top: 2%;
     }
 
     #location {
-        background-color: rgb(255, 255, 255);
+        background-color: transparent;
         color: #3d3d43;
         height: 100%;
         text-align: left;
         padding-left: 5px;
-
     }
 
     #description {
-        background-color: rgb(255, 255, 255);
+        background-color: transparent;
         color: #2a2a2f;
         font-size: 10pt;
         height: 100%;
