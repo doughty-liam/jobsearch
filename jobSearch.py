@@ -20,7 +20,7 @@ def collect_jobs() -> list:
     jobs = []
 
     for page in range(0, 100, 10):
-        raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=intern+2024&location=Toronto%2C+Ontario%2C+Canada&google_domain=google.ca&gl=ca&hl=en&start={page}&chips=date_posted%3Aweek&lrad=200&api_key={SERP_KEY}")
+        raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=intern&location=Toronto%2C+Ontario%2C+Canada&google_domain=google.ca&gl=ca&hl=en&start={page}&chips=date_posted%3Aweek&lrad=200&api_key={SERP_KEY}")
         
         # Checking if no more search results were returned
         if "error" not in raw.json().keys():

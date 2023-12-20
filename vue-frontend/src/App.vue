@@ -1,7 +1,10 @@
 <template>
-  <ul v-for="job in jobs" :key="job.id" id="joblist">  
-    <jobPosting :title="job.title" :location="job.location" :description="job.description"></jobPosting>
-  </ul>
+  <div>
+    <ul v-for="job in jobs" :key="job.id" id="joblist">
+      <jobPosting :title="job.title" :location="job.location" :description="job.description"></jobPosting>
+      <!-- <router-link to="/home" :title="job.title" :location="job.location" :description="job.description"></router-link>   -->
+    </ul>
+  </div>
 </template>
 
 <script>
