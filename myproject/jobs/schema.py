@@ -1,18 +1,17 @@
 import graphene
 from graphene_django import DjangoObjectType
-from jobs import models
+from jobs.models import Job
 
 class JobType(DjangoObjectType):
     class Meta:
-        model = models.Job
+        model = Job
+        fields = ("id", "title", "company_name", "location", "description", "dateAdded", "applied")
 
 class Query(graphene.ObjectType):
     
-    job = graphene.Field(JobType)
+    all_jobs = graphene.List(JobType)
 
-    def resolve_job(root, info):
-        return (
-            models.Job.objects.first()
-        )
+    def resolve_all_jobs(root, info):
+        return Job.objects.all()
     
 schema = graphene.Schema(query=Query)
