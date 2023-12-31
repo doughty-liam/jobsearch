@@ -1,8 +1,8 @@
 <template>
   <div>
+    <sortOptions></sortOptions>
     <ul v-for="job in jobs" :key="job.id" id="joblist">
       <jobPosting :title="job.title" :location="job.location" :description="job.description"></jobPosting>
-      <!-- <router-link to="/home" :title="job.title" :location="job.location" :description="job.description"></router-link>   -->
     </ul>
   </div>
 </template>
@@ -10,6 +10,7 @@
 <script>
 
 import jobPosting from './components/jobPosting.vue'
+import sortOptions from './components/sortOptions.vue'
 import { computed } from 'vue'
 import gql from 'graphql-tag'
 import {provideApolloClient, useQuery} from '@vue/apollo-composable'
@@ -18,7 +19,8 @@ import client from './apollo-config'
 export default {
   name: 'App',
   components: {
-    jobPosting
+    jobPosting,
+    sortOptions
   },
 
   setup() {
@@ -52,14 +54,16 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  background-color: #41502c;
   width: 40%;
   margin-top: 60px;
+  margin-left: 10px;
 }
 
 #joblist {
   display: flex;
   margin: 2px;
+  padding: 0px;
 }
 
 </style>
