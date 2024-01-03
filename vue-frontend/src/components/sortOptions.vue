@@ -20,16 +20,18 @@ export default {
   }
 
   #sortButton {
-    background-color: rgb(135, 82, 36);
+    background-color: rgb(255, 255, 255);
     font-size: 14pt;
     padding: 5px;
+    border-radius: 10px;
   }
 
   #filterButton {
-    background-color: orange;
+    background-color: rgb(255, 255, 255);
     margin-left: 10px;
     font-size: 14pt;
     padding: 5px;
+    border-radius: 10px;
   }
 
 </style>

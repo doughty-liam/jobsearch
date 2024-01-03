@@ -40,7 +40,7 @@
         height: 100%;
         text-align: left;
         padding-left: 5px;
-        padding-top: 2%;
+        padding-top: 1%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
