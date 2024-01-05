@@ -1,8 +1,8 @@
 <template>
   <div id="details-container">
-    <p>{{ title }}</p>
-    <p>{{ location }}</p>
-    <p>{{ description }}</p>
+    <h3>{{ title }}</h3>
+    <h4>{{ location }}</h4>
+    <pre id="description_container">{{ description }}</pre>
   </div>
 </template>
 
@@ -31,6 +31,18 @@ export default {
   margin-right: 10px;
   position: fixed;
   right: 0px;
+  overflow-y: auto;
+}
+
+#description_container {
+  background-color: rgb(255, 255, 255);
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+  text-align: left;
+  padding: 10px;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 </style>
