@@ -52,18 +52,18 @@ export default {
     provideApolloClient(client);
 
     const {result} = useQuery(gql`
-      {
-          allJobs {
-          id
-          title
-          location
-          description
-          }
-        }
+    query {
+	    jobsByDateAdded(keyword: "python") {
+        id
+        title
+        location
+        description
+      }
+    }
       `,
     );
     
-    const jobs = computed(() => result.value?.allJobs ?? []);
+    const jobs = computed(() => result.value?.jobsByDateAdded ?? []);
     return {
       jobs,
     }

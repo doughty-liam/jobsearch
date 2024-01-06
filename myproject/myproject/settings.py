@@ -129,7 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # GraphQL configurations
 GRAPHENE = {
-    'SCHEMA': 'jobs.schema.schema'
+    'SCHEMA': 'schema.schema'
 }
 
 CORS_ORIGIN_ALLOW_ALL = False
