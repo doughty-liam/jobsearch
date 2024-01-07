@@ -1,7 +1,7 @@
 <template>
   <div id="details-container">
-    <h3>{{ title }}</h3>
-    <h4>{{ location }}</h4>
+    <h3 id="jobTitle">{{ title }}</h3>
+    <h4>{{companyName}} {{ location }}</h4>
     <pre id="description_container">{{ description }}</pre>
   </div>
 </template>
@@ -11,6 +11,7 @@ export default {
   name: 'jobDetails',
   props: {
     id: {required: false, type: Number, default: -5},
+    companyName: {required: true, type: String, default: ""},
     title: {required: true, type: String, default: "Select a job to view details"},
     location: {required: true, type: String, default: ""},
     description: {required: true, type: String, default: ""}
@@ -23,15 +24,13 @@ export default {
 
 #details-container {
   background-color: rgb(255, 255, 255);
-  width: 49%;
-  height: 90%;
+  height: calc(100vh - 65px);
   margin-left: 5px;
   border-radius: 8px;
-  margin-top: 4px;
-  margin-right: 10px;
-  position: fixed;
-  right: 0px;
+  margin-right: 5px;
   overflow-y: auto;
+  text-align: center;
+
 }
 
 #description_container {

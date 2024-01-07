@@ -15,7 +15,6 @@ export default {
 
   #menu {
     display: flex;
-    margin-left: 2px;
     margin-bottom: 10px;
   }
 

@@ -1,12 +1,18 @@
 <template>
   <div id="mainContainer">
-    <div id="listContainer">
+    <div id="optionsBar">
       <sortOptions></sortOptions>
-      <ul v-for="job in jobs" :key="job.id" id="joblist">
-        <jobPosting :title="job.title" :location="job.location" :description="job.description" v-on:click="updateJobDetails(job.id, job.title, job.location, job.description)"></jobPosting>
-      </ul>
     </div>
-    <jobDetails :key="selectedJob.id" :title="selectedJob.title" :location="selectedJob.location" :description="selectedJob.description"></jobDetails>
+    <div id="main">
+      <div id="listContainer">
+        <ul v-for="job in jobs" :key="job.id" id="joblist">
+          <jobPosting :title="job.title" :location="job.location" :description="job.description" v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)"></jobPosting>
+        </ul>
+      </div>
+      <div id="details">
+        <jobDetails :key="selectedJob.id" :title="selectedJob.title" :companyName="selectedJob.company" :location="selectedJob.location" :description="selectedJob.description"></jobDetails>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,11 +41,14 @@ export default {
   },
 
   methods: {
-    updateJobDetails(id, title, location, description) {
+    updateJobDetails(id, title, companyName, location, description) {
       
+      companyName = companyName + " | ";
+
       this.selectedJob = {
         id: id,
         title: title,
+        company: companyName,
         location: location,
         description: description
       }
@@ -56,6 +65,7 @@ export default {
 	    jobsByDateAdded(keyword: "python") {
         id
         title
+        companyName
         location
         description
       }
@@ -78,20 +88,38 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  background-color: #2c3a50;
+}
+
+#optionsBar {
+  display: flex;
+  position: absolute;
   width: 100%;
+  height: 55px;
+  margin: 0px;
+  top: 0px;
+  background-color: #50616b;
+}
+
+#main {
   margin-top: 60px;
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
 #listContainer {
-  width: 50%;
+  height: calc(100vh - 65px);
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 #joblist {
-  margin: 2px;
+  margin: 0px;
+  margin-left: 5px;
   padding: 0px;
 }
-
 
 </style>

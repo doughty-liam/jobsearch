@@ -25,6 +25,7 @@
         grid-template-rows: 30% 20% 50%;
         align-items: center;
         background-color: #ffffff;
+        margin-bottom: 2px;
 
         border-radius: 8px;
         overflow: hidden;
