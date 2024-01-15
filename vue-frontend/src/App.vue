@@ -62,7 +62,7 @@ export default {
 
     const {result} = useQuery(gql`
     query {
-	    jobsByDateAdded(keyword: "python") {
+	    jobsBySimilarity {
         id
         title
         companyName
@@ -73,7 +73,7 @@ export default {
       `,
     );
     
-    const jobs = computed(() => result.value?.jobsByDateAdded ?? []);
+    const jobs = computed(() => result.value?.jobsBySimilarity ?? []);
     return {
       jobs,
     }

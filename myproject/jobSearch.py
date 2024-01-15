@@ -5,6 +5,9 @@ import json
 import pandas as pd
 import sqlalchemy as sqla
 from datetime import datetime as dt
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 load_dotenv()
 
@@ -68,19 +71,43 @@ def clean(data:str) -> pd.DataFrame:
     related_links = pd.Series(rel_links).apply(pd.Series) # Converting "link" and "text" series back to df
     jobs_clean = (pd.concat([jobs.drop(["detected_extensions", "related_links"], axis=1), detected_extensions, related_links], axis=1)).astype(str) # Recombining all cols
     jobs_clean = jobs_clean[["title", "company_name", "location", "description"]]
-    jobs_clean["dateAdded"] = dt.date(dt.now())
+    jobs_clean["date_added"] = dt.date(dt.now())
     jobs_clean["applied"] = False
     
     return jobs_clean
-    
+
+
+def find_similarity(text1:str, text2:str):
+
+    vectorizer = TfidfVectorizer()
+    vectors = vectorizer.fit_transform([text1, text2])
+
+    similarity = cosine_similarity(vectors)
+
+    return similarity[0][1]
+
 
 if __name__ == "__main__":
 
     engine = sqla.create_engine("sqlite:///db.sqlite3")
     connection = engine.connect()
+
+    FILE_resume = open("resume.txt", "r+")
+    resume_text = FILE_resume.read()
     
     jobs_jstr = collect_jobs()
     jobs_df = clean(jobs_jstr)
+
+    descriptions = jobs_df[["description"]].to_numpy()
+    temp = []
+
+    for description in descriptions:
+        temp.append(find_similarity(resume_text, description[0]))
+
+    similarity_rating = pd.Series(temp)
+
+    jobs_df.insert(6, "similarity_rating", similarity_rating)
+
     jobs_df.to_sql("jobs_job", con=engine, index=False, if_exists="append")
 
     connection.close()
