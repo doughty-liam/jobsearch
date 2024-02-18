@@ -6,7 +6,7 @@
     <div id="main">
       <div id="listContainer">
         <ul v-for="job in jobs" :key="job.id" id="joblist">
-          <jobPosting :title="job.title" :location="job.location" :description="job.description" v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)"></jobPosting>
+          <jobPosting :title="job.title" :location="job.location" :company="job.companyName" v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)"></jobPosting>
         </ul>
       </div>
       <div id="details">
@@ -53,6 +53,12 @@ export default {
         description: description
       }
 
+      const page_title = document.getElementById("page_title");
+      const detailsContainer = document.getElementById("details");
+
+      page_title.innerHTML = title;
+      detailsContainer.style.visibility = "visible";
+
     }
   },
 
@@ -62,7 +68,7 @@ export default {
 
     const {result} = useQuery(gql`
     query {
-	    jobsBySimilarity {
+	    jobsByDateAdded(keyword: "Python") {
         id
         title
         companyName
@@ -73,7 +79,7 @@ export default {
       `,
     );
     
-    const jobs = computed(() => result.value?.jobsBySimilarity ?? []);
+    const jobs = computed(() => result.value?.jobsByDateAdded ?? []);
     return {
       jobs,
     }
@@ -90,24 +96,29 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#main {
+  width: 100%;
+}
+
 #optionsBar {
   display: flex;
   position: absolute;
   width: 100%;
   height: 55px;
-  margin: 0px;
+  margin-left: 50px;
   top: 0px;
-  background-color: #50616b;
+  background-color: transparent;
 }
 
 #main {
   margin-top: 60px;
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 30% 70%;
 }
 
 #listContainer {
   height: calc(100vh - 65px);
+  width: 100%;
   overflow-y: scroll;
 }
 
@@ -120,6 +131,11 @@ export default {
   margin: 0px;
   margin-left: 5px;
   padding: 0px;
+}
+
+#details {
+  width: 100%;
+  visibility: hidden;
 }
 
 </style>

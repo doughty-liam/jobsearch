@@ -1,7 +1,7 @@
 <template>
   <div id="menu">
-    <div id="sortButton">Sort</div>
-    <div id="filterButton">Filter</div>
+    <div class="options" id="filter">Filter</div>
+    <div class="options" id="find-matches">Find Matches</div>
   </div>
 </template>
 
@@ -14,23 +14,31 @@ export default {
 <style>
 
   #menu {
-    display: flex;
     margin-bottom: 10px;
+    display: flex;
   }
 
-  #sortButton {
-    background-color: rgb(255, 255, 255);
-    font-size: 14pt;
-    padding: 5px;
-    border-radius: 10px;
+  #filter {
+    text-align: left;
+    padding-top: 10px;
+    justify-content: left;
   }
 
-  #filterButton {
-    background-color: rgb(255, 255, 255);
-    margin-left: 10px;
-    font-size: 14pt;
-    padding: 5px;
-    border-radius: 10px;
+  #find-matches {
+    text-align: left;
+    padding-left: 50px;
+    padding-top: 10px;
+  }
+
+  .options {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20pt;
+    font-weight: 700;
+    background-color: transparent;
+    color: #003566;
+    justify-self: center;
+    height: 100%;
+    padding-top: 10px;
   }
 
 </style>
