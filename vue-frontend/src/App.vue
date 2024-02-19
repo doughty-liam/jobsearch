@@ -3,6 +3,7 @@
     <div id="optionsBar">
       <sortOptions></sortOptions>
     </div>
+    <sortMenu id="sortMenu"></sortMenu>
     <div id="main">
       <div id="listContainer">
         <ul v-for="job in jobs" :key="job.id" id="joblist">
@@ -21,6 +22,7 @@
 import jobPosting from './components/jobPosting.vue'
 import sortOptions from './components/sortOptions.vue'
 import jobDetails from './components/jobDetails.vue'
+import sortMenu from './components/sortMenu.vue'
 import { computed } from 'vue'
 import gql from 'graphql-tag'
 import {provideApolloClient, useQuery} from '@vue/apollo-composable'
@@ -31,12 +33,14 @@ export default {
   components: {
     jobPosting,
     sortOptions,
+    sortMenu,
     jobDetails
   },
   data() {
 
     return {
-      selectedJob: {}
+      selectedJob: {},
+      menuActive: false,
     }
   },
 
@@ -58,6 +62,12 @@ export default {
 
       page_title.innerHTML = title;
       detailsContainer.style.visibility = "visible";
+
+    },
+    toggle() {
+		
+		/* handle event emitted by filter button press in
+		sortOptions */
 
     }
   },
@@ -101,13 +111,19 @@ export default {
 }
 
 #optionsBar {
+  background-color: #001d3d;
   display: flex;
   position: absolute;
   width: 100%;
   height: 55px;
-  margin-left: 50px;
   top: 0px;
-  background-color: transparent;
+  left: 0px;
+}
+
+#sortMenu {
+  position: absolute;
+  left: 50px;
+  top: 60px;
 }
 
 #main {

@@ -1,7 +1,6 @@
 <template>
   <div id="menu">
     <div class="options" id="filter">Filter</div>
-    <div class="options" id="find-matches">Find Matches</div>
   </div>
 </template>
 
@@ -11,6 +10,9 @@ export default {
 }
 </script>
 
+<!-- Trigger event from here which is handled
+by the parent component, App.vue -->
+
 <style>
 
   #menu {
@@ -19,15 +21,11 @@ export default {
   }
 
   #filter {
-    text-align: left;
+    text-align: center;
+    width: 150px;
+    margin-left: 50px;
     padding-top: 10px;
     justify-content: left;
-  }
-
-  #find-matches {
-    text-align: left;
-    padding-left: 50px;
-    padding-top: 10px;
   }
 
   .options {
@@ -35,10 +33,16 @@ export default {
     font-size: 20pt;
     font-weight: 700;
     background-color: transparent;
-    color: #003566;
+    color: #e2d6be  ;
     justify-self: center;
     height: 100%;
     padding-top: 10px;
+    transition-duration: 0.6s;
+  }
+
+  .options:hover {
+    color: #d230c2;
+    font-size: 20.5pt;
   }
 
 </style>
