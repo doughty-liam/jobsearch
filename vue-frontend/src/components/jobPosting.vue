@@ -1,5 +1,5 @@
 <template>
-    <li id="jobPosting">
+    <li class="jobPosting">
         <h2 class="info" id="title">{{ title }}</h2>
         <div class="info" id="company">{{ company }}</div>
         <div class="info" id="location">{{ location }}</div>
@@ -18,7 +18,7 @@
 
 <style scoped>
 
-    #jobPosting {
+    .jobPosting {
         width: 100%;
         height: 120px;
         display: grid;
@@ -32,7 +32,7 @@
         overflow: hidden;
     }
 
-    #jobPosting:hover {
+    .jobPosting:hover {
         background-color: #19295e;
     }
 
