@@ -1,9 +1,16 @@
 <template>
-    <li class="jobPosting">
-        <h2 class="info" id="title">{{ title }}</h2>
-        <div class="info" id="company">{{ company }}</div>
-        <div class="info" id="location">{{ location }}</div>
-    </li>
+    <div class="postingContainer">
+        <li class="jobPosting">
+            <h2 class="info" id="title">{{ title }}</h2>
+            <div class="info" id="company">{{ company }}</div>
+            <div class="info" id="location">{{ location }}</div>
+        </li>
+<!--         <input type="checkbox" id="appliedCheck">
+-->     <div id="appliedLabel">
+            <div id="checkTop" class="checkMark"></div>
+            <div id="checkBottom" class="checkMark"></div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -18,22 +25,59 @@
 
 <style scoped>
 
+    .postingContainer {
+        display: flex;
+        background-color: #001D3D;
+        color: #FFFFFF;
+        border-radius: 8px;
+        margin-bottom: 2px;
+        transition: background-color 0.3s;
+    }
+
+    .postingContainer:hover {
+        background-color: #19295e;
+    }
+
     .jobPosting {
-        width: 100%;
+        width: 80%;
         height: 120px;
         display: grid;
         grid-template-rows: 40px 40px 40px;
         align-items: center;
-        background-color: #001D3D;
-        margin-bottom: 2px;
-        transition: background-color 0.3s;
-
-        border-radius: 8px;
         overflow: hidden;
     }
 
-    .jobPosting:hover {
-        background-color: #19295e;
+    #appliedLabel {
+        height: 50px;
+        width: 50px;
+        margin: auto;
+        color: #ffffff;
+    }
+
+    #checkTop {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 25px;
+        height: 6px;
+
+        transform: rotate(-50deg);
+    }
+
+    #checkBottom {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 15px;
+        height: 6px;
+
+        transform: rotate(40deg) translateY(5px) translateX(-5px);
+    }
+
+    .checkMark {
+        background-color: green;
     }
 
     #title {

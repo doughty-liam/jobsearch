@@ -15,7 +15,6 @@ class applied(graphene.Mutation):
     class Arguments:
         jobid = graphene.Int()
 
-    @classmethod
     def mutate(cls, info, jobid):
         job = Job.objects.get(id=jobid)
         job.applied = True
