@@ -7,7 +7,7 @@ class Job(models.Model):
     location = models.CharField(max_length=50)
     description = models.CharField(max_length=10000)
     date_added = models.DateField()
-    applied = models.BooleanField(blank=False)
+    applied = models.CharField(max_length=1)
     similarity_rating = models.FloatField()
 
     def __str__(self):

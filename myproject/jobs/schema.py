@@ -8,15 +8,30 @@ class JobType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
-    all_jobs = graphene.List(JobType)
-    jobs_by_date_added = graphene.List(JobType, keyword=graphene.String(required=True))
-    jobs_by_similarity = graphene.List(JobType)
+    all_jobs = graphene.List(JobType, first=graphene.Int(required=True), skip=graphene.Int(required=True))
+    jobs_by_date_added = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), keyword=graphene.String(required=True))
+    jobs_by_similarity = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int())
 
-    def resolve_all_jobs(root, info, keyword):
-        return Job.objects.all()
+    def resolve_all_jobs(root, info, first, skip):
+        qs = Job.objects.all()
+        if skip:
+            qs = qs[skip:]
+        if first:
+            qs = qs[:first]
+        return qs    
     
-    def resolve_jobs_by_date_added(root, info, keyword):
-        return Job.objects.order_by('-date_added').filter(description__contains=keyword) # minus sign used to sort in descending order
+    def resolve_jobs_by_date_added(root, info, first, skip, keyword):
+        qs = Job.objects.order_by('-date_added').filter(description__contains=keyword)
+        if skip:
+            qs = qs[skip:]
+        if first:
+            qs = qs[:first]
+        return qs
     
-    def resolve_jobs_by_similarity(root, info):
-        return Job.objects.order_by('-similarity_rating')
+    def resolve_jobs_by_similarity(root, info, first, skip):
+        qs = Job.objects.order_by('-similarity_rating')
+        if skip:
+            qs = qs[skip:]
+        if first:
+            qs = qs[:first]
+        return qs

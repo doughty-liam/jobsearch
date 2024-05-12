@@ -7,7 +7,7 @@
 		<div id="main">
 			<div id="listContainer">
 				<ul v-for="job in jobs" :key="job.id" id="joblist">
-					<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id"
+					<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"
 						v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)">
 					</jobPosting>
 				</ul>
@@ -81,20 +81,28 @@ export default {
 
 		provideApolloClient(client);
 
+		/*
+			Add in logic to display N number of jobs per page
+			skip N*currPageNum
+		
+		const jobsPerPage
+		const currPageNum
+		*/
 		const { result } = useQuery(gql`
 			query {
-				jobsByDateAdded(keyword: "data") {
+				jobsBySimilarity(first:10, skip:0) {
 				id
 				title
 				companyName
 				location
 				description
+				applied
 			}
 			}
 			`,
 		);
 
-		const jobs = computed(() => result.value?.jobsByDateAdded ?? []);
+		const jobs = computed(() => result.value?.jobsBySimilarity ?? []);
 		return {
 			jobs,
 		}
