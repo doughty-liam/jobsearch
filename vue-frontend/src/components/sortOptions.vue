@@ -32,7 +32,7 @@ by the parent component, App.vue -->
 	font-size: 20pt;
 	font-weight: 700;
 	background-color: transparent;
-	color: #e2d6be;
+	color: rgb(247, 246, 237);
 	justify-self: center;
 	height: 100%;
 	padding-top: 10px;
@@ -40,7 +40,7 @@ by the parent component, App.vue -->
 }
 
 .options:hover {
-	color: #d230c2;
+	color: #7779a2;
 	font-size: 20.5pt;
 }
 </style>

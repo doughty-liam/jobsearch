@@ -19,7 +19,7 @@
         display:flex;
         flex-direction: column;
         flex: 100px;
-        background-color: #0f2d4d;
+        background-color: #103047;
         border-radius: 5px;
         border: 1px solid #605d6a;
     }   
@@ -28,7 +28,7 @@
         font-size: 14pt;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-weight: 500;
-        color: #FFFFFF;
+        color: rgb(247, 246, 237);
         flex: 1;
         text-align: center;
         line-height: 50px;
@@ -37,6 +37,6 @@
     }
 
     .option:hover {
-        color: rgb(255, 43, 149);
+        color: rgb(201, 216, 255);
     }
 </style>

@@ -12,9 +12,11 @@
 					</jobPosting>
 				</ul>
 				<div id="resultsNav">
-					<button @click="nextPage"></button>
-<!-- 					<input type="number" max="10" id="pageNumInput" :value="offset+1" :onChange="updateResults(2)">
- -->			</div>
+					<!-- This whole div should be its own component -->
+					<button id="pageBack" class="pageNav" @click="nextPage(0)">&#8249;</button>
+					<div id="pageNum">{{ pageNum }}</div>
+					<button id="pageForward" class="pageNav" @click="nextPage(1)">&#8250;</button>
+				</div>
 			</div>
 			<div id="details">
 				<jobDetails :key="selectedJob.id" :title="selectedJob.title" :companyName="selectedJob.company"
@@ -45,8 +47,9 @@ export default {
 	},
 
 	setup() {
-		const jobsPerPage = ref(10)
+		const jobsPerPage = ref(20)
 		const offset = ref(0)
+		const pageNum = ref(1)
 		const jobs = ref([])
 		const selectedJob = ref({})
 
@@ -76,9 +79,19 @@ export default {
 			}
 		})
 
-		const nextPage = async () => {	
-			console.log("fetchJobs called.")
-			offset.value += jobsPerPage.value
+		const nextPage = async (direction) => {	
+			
+			if (direction == 1) {
+				offset.value += jobsPerPage.value
+				pageNum.value += 1
+			} else {
+				if(offset.value < jobsPerPage.value) {
+					offset.value = 0
+				} else {
+					offset.value -= jobsPerPage.value
+					pageNum.value -= 1
+				}
+			}
 			fetchMore({
 				variables: {
 					skip: offset.value
@@ -116,6 +129,7 @@ export default {
 			jobs,
 			offset,
 			jobsPerPage,
+			pageNum,
 			nextPage,
 			updateJobDetails,
 			selectedJob
@@ -138,7 +152,7 @@ export default {
 }
 
 #optionsBar {
-	background-color: #001d3d;
+	background-color: #103047;
 	display: flex;
 	position: absolute;
 	width: 100%;
@@ -164,11 +178,34 @@ export default {
 	height: calc(100vh - 65px);
 	width: 100%;
 	overflow-y: scroll;
-	background-color: rgb(210, 124, 124);
+	background-color: rgb(247, 246, 237);
+}
+
+#pageNum {
+	height: 100%;
+	width: 15%;
+	text-align: center;
+	line-height: 50px;
+	font-size: 16pt;
+}
+
+.pageNav {
+	background-color: transparent;
+	width: 40px;
+	border: none;
+	font-size: 30pt;
+	height: 100%;
+	margin-bottom: 5px;
+	
+}
+
+.pageNav:hover {
+	transition-duration: 300ms;
+	color: #0d5c87;
 }
 
 #resultsNav {
-	background-color: yellow;
+	background-color: rgb(247, 246, 237);
 	height: 50px;
 	width: 100%;
 	display: flex;
@@ -180,16 +217,6 @@ input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
-}
-
-#pageNumInput {
-	margin: 0 auto;
-	width: 25px;
-	height: 60%;
-	text-align: center;
-	font-size: 16pt;
-	-webkit-appearance: none;
-	appearance: none;
 }
 
 ::-webkit-scrollbar {

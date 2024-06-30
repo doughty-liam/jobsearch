@@ -32,15 +32,15 @@ export default {
 
     .postingContainer {
         display: flex;
-        background-color: #001D3D;
-        color: #FFFFFF;
-        border-radius: 8px;
+        background-color: #103047;
+        color: rgb(247, 246, 237);
+        border-radius: 8px; 
         margin-bottom: 2px;
         transition: background-color 0.3s;
     }
 
     .postingContainer:hover {
-        background-color: #19295e;
+        background-color: #264256;
     }
 
     .jobPosting {
@@ -55,7 +55,7 @@ export default {
     #title {
         background-color: transparent;
         font-size: 20pt;
-        color: #e2d6be;
+        color: rgb(247, 246, 237);
         height: 100%;
         text-align: left;
         padding-top: 1%;
@@ -76,7 +76,7 @@ export default {
 
     .info {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #e2d6be;
+        color: rgb(247, 246, 237);
         padding-left: 5px;
     }
 

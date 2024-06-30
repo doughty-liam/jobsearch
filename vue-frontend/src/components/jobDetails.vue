@@ -23,8 +23,8 @@ export default {
 <style>
 
 #details-container {
-  background-color: #001D3D;
-  color: #e2d6be;
+  background-color: #103047;
+  color: rgb(247, 246, 237);
   height: calc(100vh - 65px);
   margin-left: 5px;
   border-radius: 8px;
@@ -35,9 +35,9 @@ export default {
 }
 
 #description_container {
-  background-color: #001D3D;
+  background-color: #103047;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #e2d6be;
+  color: rgb(247, 246, 237);
   text-align: left;
   padding: 10px;
   font-size: 14pt;
@@ -48,13 +48,13 @@ export default {
 
 #jobTitle {
   font-size: 30pt;
-  color: #39a73e;
+  color: rgb(247, 246, 237);
   font-weight:700;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #company-location {
-  color: #39a73e;
+  color: rgb(247, 246, 237);
   font-size: 20pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
