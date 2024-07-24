@@ -1,26 +1,16 @@
 <template>
 	<div id="mainContainer">
-		<div id="optionsBar">
-			<sortOptions></sortOptions>
-		</div>
-		<sortMenu id="sortMenu"></sortMenu>
-		<div id="main">
-			<div id="listContainer">
-				<ul v-for="job in jobs" :key="job.id" id="joblist">
-					<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"
-						v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)">
-					</jobPosting>
-				</ul>
-				<div id="resultsNav">
-					<!-- This whole div should be its own component -->
-					<button id="pageBack" class="pageNav" @click="nextPage(0)">&#8249;</button>
-					<div id="pageNum">{{ pageNum }}</div>
-					<button id="pageForward" class="pageNav" @click="nextPage(1)">&#8250;</button>
-				</div>
-			</div>
-			<div id="details">
-				<jobDetails :key="selectedJob.id" :title="selectedJob.title" :companyName="selectedJob.company"
-					:location="selectedJob.location" :description="selectedJob.description"></jobDetails>
+		<div id="listContainer">
+			<ul v-for="job in jobs" :key="job.id" id="joblist">
+				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"
+					v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)">
+				</jobPosting>
+			</ul>
+			<div id="resultsNav">
+				<!-- This whole div should be its own component -->
+				<button id="pageBack" class="pageNav" @click="nextPage(0)">&#8249;</button>
+				<div id="pageNum">{{ pageNum }}</div>
+				<button id="pageForward" class="pageNav" @click="nextPage(1)">&#8250;</button>
 			</div>
 		</div>
 	</div>
@@ -29,9 +19,9 @@
 <script>
 
 import jobPosting from './components/jobPosting.vue'
-import sortOptions from './components/sortOptions.vue'
+/* import sortOptions from './components/sortOptions.vue'
 import jobDetails from './components/jobDetails.vue'
-import sortMenu from './components/sortMenu.vue'
+import sortMenu from './components/sortMenu.vue' */
 import { ref, watch } from 'vue'
 import gql from 'graphql-tag'
 import { provideApolloClient, useQuery } from '@vue/apollo-composable'
@@ -41,9 +31,9 @@ import client from './apollo-config'
 export default {
 	components: {
 		jobPosting,
-		sortOptions,
+/* 		sortOptions,
 		jobDetails,
-		sortMenu
+		sortMenu */
 	},
 
 	setup() {
@@ -107,7 +97,7 @@ export default {
 
 		}
 
-		const updateJobDetails = (id, title, companyName, location, description) => {
+		/* const updateJobDetails = (id, title, companyName, location, description) => {
 			companyName = companyName + " | ";
 
 			selectedJob.value = {
@@ -123,7 +113,7 @@ export default {
 
 			page_title.innerHTML = title;
 			detailsContainer.style.visibility = "visible";
-		}
+		} */
 
 		return {
 			jobs,
@@ -131,7 +121,7 @@ export default {
 			jobsPerPage,
 			pageNum,
 			nextPage,
-			updateJobDetails,
+			//updateJobDetails,
 			selectedJob
 		}
 	}
@@ -141,44 +131,21 @@ export default {
 
 <style>
 #mainContainer {
+	background-color: rgb(23, 24, 29);
 	display: flex;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-#main {
+	height: 100vh;
 	width: 100%;
-}
-
-#optionsBar {
-	background-color: #103047;
-	display: flex;
-	position: absolute;
-	width: 100%;
-	height: 55px;
-	top: 0px;
-	left: 0px;
-}
-
-#sortMenu {
-	position: absolute;
-	left: 50px;
-	top: 60px;
-	visibility: hidden;
-}
-
-#main {
-	margin-top: 60px;
-	display: grid;
-	grid-template-columns: 30% 70%;
+	margin: auto;
+	justify-content: center;
 }
 
 #listContainer {
-	height: calc(100vh - 65px);
-	width: 100%;
+	height: 100vh;
+	width: 40%;
 	overflow-y: scroll;
-	background-color: rgb(247, 246, 237);
 }
 
 #pageNum {
@@ -187,10 +154,12 @@ export default {
 	text-align: center;
 	line-height: 50px;
 	font-size: 16pt;
+	color: rgb(193, 193, 193);
 }
 
 .pageNav {
 	background-color: transparent;
+	color: rgb(193, 193, 193);
 	width: 40px;
 	border: none;
 	font-size: 30pt;
@@ -205,7 +174,6 @@ export default {
 }
 
 #resultsNav {
-	background-color: rgb(247, 246, 237);
 	height: 50px;
 	width: 100%;
 	display: flex;
@@ -230,8 +198,4 @@ input::-webkit-outer-spin-button {
 	padding: 0px;
 }
 
-#details {
-	width: 100%;
-	visibility: hidden;
-}
 </style>

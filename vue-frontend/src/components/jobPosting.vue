@@ -32,10 +32,10 @@ export default {
 
     .postingContainer {
         display: flex;
-        background-color: #103047;
+        background-color: #272d33;
         color: rgb(247, 246, 237);
         border-radius: 8px; 
-        margin-bottom: 2px;
+        margin-bottom: 10px;
         transition: background-color 0.3s;
     }
 
