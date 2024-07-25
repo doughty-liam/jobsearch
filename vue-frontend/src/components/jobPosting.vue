@@ -1,5 +1,5 @@
 <template>
-    <div class="postingContainer">
+    <div class="postingContainer" ref="main" @click="testFunc()">
         <li class="jobPosting">
             <h2 class="info" id="title">{{ title }}</h2>
             <div class="info" id="company">{{ company }}</div>
@@ -13,8 +13,10 @@
 <script>
 
 import checkMark from './checkMark.vue'
+// import ref from 'vue'
 
 export default {
+    
     components: {
         checkMark
     },
@@ -22,7 +24,27 @@ export default {
         title: {required: true, type: String},
         location: {required: true, type: String},
         company: {required: true, type: String},
-        applied: {required: true, type: Boolean}
+        applied: {required: true, type: Boolean},
+    },
+
+    setup() {
+        
+        // const main = ref(null);
+        var active = 0;
+
+        const testFunc = () => {
+
+            if(active == 1) {
+                console.log("Component was not active.")
+            } else {
+                // main.value.style.height = '500px'
+                console.log("Component was active.")
+            }
+        }
+
+        return {
+            testFunc
+        }
     }
 }
 
@@ -31,16 +53,20 @@ export default {
 <style scoped>
 
     .postingContainer {
+        width: 100%;
         display: flex;
         background-color: #272d33;
         color: rgb(247, 246, 237);
         border-radius: 8px; 
         margin-bottom: 10px;
+        height: 120px;
         transition: background-color 0.3s;
+        transition: height 0.3s ease-out;
     }
 
-    .postingContainer:hover {
+    .active, .postingContainer:hover {
         background-color: #264256;
+        height: 500px;
     }
 
     .jobPosting {
@@ -67,11 +93,15 @@ export default {
     #company {
         background-color: transparent;
         font-size: 18pt;
+        text-overflow: ellipsis;
+
     }
 
     #location {
         background-color: transparent;
         font-size: 14pt;
+        text-overflow: ellipsis;
+
     }
 
     .info {

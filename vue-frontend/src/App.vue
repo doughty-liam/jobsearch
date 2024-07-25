@@ -6,12 +6,12 @@
 					v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)">
 				</jobPosting>
 			</ul>
-			<div id="resultsNav">
+		</div>
+		<div id="resultsNav">
 				<!-- This whole div should be its own component -->
 				<button id="pageBack" class="pageNav" @click="nextPage(0)">&#8249;</button>
 				<div id="pageNum">{{ pageNum }}</div>
 				<button id="pageForward" class="pageNav" @click="nextPage(1)">&#8250;</button>
-			</div>
 		</div>
 	</div>
 </template>
@@ -19,9 +19,6 @@
 <script>
 
 import jobPosting from './components/jobPosting.vue'
-/* import sortOptions from './components/sortOptions.vue'
-import jobDetails from './components/jobDetails.vue'
-import sortMenu from './components/sortMenu.vue' */
 import { ref, watch } from 'vue'
 import gql from 'graphql-tag'
 import { provideApolloClient, useQuery } from '@vue/apollo-composable'
@@ -143,23 +140,34 @@ export default {
 }
 
 #listContainer {
-	height: 100vh;
+	padding-top: 10px;
+	height: calc(100vh - 50px);
 	width: 40%;
 	overflow-y: scroll;
+	mask-image: linear-gradient(
+		to bottom,
+		rgb(23, 24, 29) 90%,
+		transparent
+	);
+}
+
+#joblist {
+	margin: 0px;
+	padding: 0px;
 }
 
 #pageNum {
 	height: 100%;
-	width: 15%;
+	width: 5%;
 	text-align: center;
 	line-height: 50px;
 	font-size: 16pt;
-	color: rgb(193, 193, 193);
+	color: rgb(217, 217, 217);
 }
 
 .pageNav {
 	background-color: transparent;
-	color: rgb(193, 193, 193);
+	color: rgb(217, 217, 217);
 	width: 40px;
 	border: none;
 	font-size: 30pt;
@@ -174,6 +182,8 @@ export default {
 }
 
 #resultsNav {
+	position: absolute;
+	bottom: 0px;
 	height: 50px;
 	width: 100%;
 	display: flex;
@@ -190,12 +200,6 @@ input::-webkit-outer-spin-button {
 ::-webkit-scrollbar {
 	width: 0px;
 	background: transparent;
-}
-
-#joblist {
-	margin: 0px;
-	margin-left: 5px;
-	padding: 0px;
 }
 
 </style>
