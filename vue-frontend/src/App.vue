@@ -2,8 +2,10 @@
 	<div id="mainContainer">
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
-				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"
+				<!-- <jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"
 					v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)">
+				</jobPosting> -->
+				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied" :description="job.description">
 				</jobPosting>
 			</ul>
 		</div>
@@ -128,7 +130,7 @@ export default {
 
 <style>
 #mainContainer {
-	background-color: rgb(23, 24, 29);
+	background-color: rgb(24, 27, 32);
 	display: flex;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;

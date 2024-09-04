@@ -25,5 +25,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 db.*
+fonts
 *__pycache__
 resume.txt

@@ -1,9 +1,10 @@
 <template>
-    <div class="postingContainer" ref="main" @click="testFunc()">
-        <li class="jobPosting">
-            <h2 class="info" id="title">{{ title }}</h2>
-            <div class="info" id="company">{{ company }}</div>
-            <div class="info" id="location">{{ location }}</div>
+    <div class="postingContainer" :class="{expanded: isSelected}" @click="testFunc()">
+        <li class="jobPosting" :class="{addDescToGrid: isSelected}">
+            <h2 class="title info">{{ title }}</h2>
+            <div class="company info">{{ company }}</div>
+            <div class="location info">{{ location }}</div>
+            <div class="description" :class="{displayDescription: isSelected}"> {{ description }}</div>
         </li>
         <checkMark :applied=applied></checkMark>
         <!-- insert checkMark component -->
@@ -13,7 +14,7 @@
 <script>
 
 import checkMark from './checkMark.vue'
-// import ref from 'vue'
+import {ref} from 'vue'
 
 export default {
     
@@ -25,25 +26,27 @@ export default {
         location: {required: true, type: String},
         company: {required: true, type: String},
         applied: {required: true, type: Boolean},
+        description: {required: false, type: String}
     },
 
     setup() {
         
-        // const main = ref(null);
-        var active = 0;
+        var isSelected = ref(false)
 
         const testFunc = () => {
 
-            if(active == 1) {
+            if(isSelected.value == false) {
+                isSelected.value = true
                 console.log("Component was not active.")
             } else {
-                // main.value.style.height = '500px'
+                isSelected.value = false
                 console.log("Component was active.")
             }
         }
 
         return {
-            testFunc
+            testFunc,
+            isSelected
         }
     }
 }
@@ -51,6 +54,11 @@ export default {
 </script>
 
 <style scoped>
+
+    @font-face {
+        font-family: "Barlow Regular";
+        src: url("../../../fonts/Barlow-Regular.ttf ");
+    }
 
     .postingContainer {
         width: 100%;
@@ -60,17 +68,20 @@ export default {
         border-radius: 8px; 
         margin-bottom: 10px;
         height: 120px;
-        transition: background-color 0.3s;
-        transition: height 0.3s ease-out;
+        transition: all 0.2s ease-in-out;
     }
 
-    .active, .postingContainer:hover {
-        background-color: #264256;
+    .postingContainer:hover {
+        background-color: #193142;
+    }
+
+    .expanded {
         height: 500px;
+        background-color: #193142;
     }
 
     .jobPosting {
-        width: 80%;
+        width: 85%;
         height: 120px;
         display: grid;
         grid-template-rows: 40px 40px 40px;
@@ -78,7 +89,13 @@ export default {
         overflow: hidden;
     }
 
-    #title {
+    .addDescToGrid {
+        height: 500px;
+        grid-template-rows: 35px 35px 20px 380px;
+    }
+
+    .title {
+        font-family: Barlow Regular;
         background-color: transparent;
         font-size: 20pt;
         color: rgb(247, 246, 237);
@@ -90,22 +107,56 @@ export default {
         text-overflow: ellipsis;
     }
 
-    #company {
+    .company {
+        font-family: Barlow Regular;
         background-color: transparent;
         font-size: 18pt;
+        overflow: hidden;
         text-overflow: ellipsis;
 
     }
 
-    #location {
+    .location {
+        font-family: Barlow Regular;
         background-color: transparent;
         font-size: 14pt;
         text-overflow: ellipsis;
 
     }
 
+    .description {
+        overflow: hidden;   
+        background-color: transparent;
+        color: transparent;
+        font-family: Barlow Regular;
+        padding-left: 5px;
+        padding-top: 20px;
+        overflow-y: auto;
+    }
+
+    .displayDescription {
+        height: 100%;
+        animation: changeDescColor 0.4s linear 1;
+        color: rgb(247, 246, 237);
+    }
+
+    @keyframes changeDescColor {
+        0% {
+            color: transparent;
+        }
+
+        50% {
+            color: linear-gradient(to bottom, transparent 50%, rgb(247, 246, 237) 50%)
+        }
+
+        100% {
+            color: rgb(247, 246, 237);
+
+        }
+    }
+
     .info {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: Barlow Regular;
         color: rgb(247, 246, 237);
         padding-left: 5px;
     }
