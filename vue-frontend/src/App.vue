@@ -46,7 +46,7 @@ export default {
 		provideApolloClient(client)
 		const { result, fetchMore } = useQuery(gql`
 			query getRankedJobs($first: Int, $skip: Int) {
-				jobsBySimilarity(first: $first, skip: $skip) {
+				jobsBySimilarity(first: $first, skip: $skip, isApplied: true) {
 					id
 					title
 					companyName

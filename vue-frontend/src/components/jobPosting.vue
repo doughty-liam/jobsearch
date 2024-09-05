@@ -4,7 +4,10 @@
             <h2 class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
-            <div class="description" :class="{displayDescription: isSelected}"> {{ description }}</div>
+            <transition>
+                <div id="descriptionText" v-if="isSelected">{{ description }}</div>
+                <!-- <div class="description" :class="{displayDescription: isSelected}"> {{ description }}</div> -->
+            </transition>
         </li>
         <checkMark :applied=applied></checkMark>
         <!-- insert checkMark component -->
@@ -63,35 +66,37 @@ export default {
     .postingContainer {
         width: 100%;
         display: flex;
-        background-color: #272d33;
-        color: rgb(247, 246, 237);
+        background-color: #1d2227;
+        /* color: rgb(247, 246, 237); */
         border-radius: 8px; 
         margin-bottom: 10px;
         height: 120px;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.4s ease-in-out;
     }
 
     .postingContainer:hover {
-        background-color: #193142;
+        background-color: #222c33;
     }
 
     .expanded {
-        height: 500px;
-        background-color: #193142;
+        height: 550px;
+        background-color: #222c33;
     }
 
     .jobPosting {
-        width: 85%;
+        width: 90%;
         height: 120px;
         display: grid;
         grid-template-rows: 40px 40px 40px;
         align-items: center;
         overflow: hidden;
+        transition: all 0.4s ease-in-out;
+        padding: 5px;
     }
 
     .addDescToGrid {
-        height: 500px;
-        grid-template-rows: 35px 35px 20px 380px;
+        grid-template-rows: 40px 40px 40px 415px;
+        height: 550px;
     }
 
     .title {
@@ -101,7 +106,6 @@ export default {
         color: rgb(247, 246, 237);
         height: 100%;
         text-align: left;
-        padding-top: 1%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -111,32 +115,51 @@ export default {
         font-family: Barlow Regular;
         background-color: transparent;
         font-size: 18pt;
+        height: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
-
     }
 
     .location {
         font-family: Barlow Regular;
         background-color: transparent;
         font-size: 14pt;
+        height: 100%;
         text-overflow: ellipsis;
 
     }
 
-    .description {
+    #descriptionText {
+        font-family: Barlow Regular;
+        font-size: 14pt;
+        height: 100%;
+        overflow-y: scroll;
+        color: rgb(247, 246, 237);
+        padding-left: 10px;
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+        transition: all 0.4s ease;
+    }
+
+    .v-enter-from,
+    .v-leave-to {
+        opacity: 0;
+    }
+
+    /* .description {
         overflow: hidden;   
         background-color: transparent;
-        color: transparent;
         font-family: Barlow Regular;
-        padding-left: 5px;
+        padding-left: 10px;
         padding-top: 20px;
         overflow-y: auto;
     }
 
     .displayDescription {
         height: 100%;
-        animation: changeDescColor 0.4s linear 1;
+        animation: changeDescColor 0.2s linear 1;
         color: rgb(247, 246, 237);
     }
 
@@ -153,12 +176,12 @@ export default {
             color: rgb(247, 246, 237);
 
         }
-    }
+    } */
 
     .info {
         font-family: Barlow Regular;
         color: rgb(247, 246, 237);
-        padding-left: 5px;
+        padding-left: 10px;
     }
 
 </style>
