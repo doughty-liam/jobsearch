@@ -1,11 +1,11 @@
 <template>
     <div class="postingContainer" :class="{expanded: isSelected}" @click="testFunc()">
         <li class="jobPosting" :class="{addDescToGrid: isSelected}">
-            <h2 class="title info">{{ title }}</h2>
+            <h2 id="title" class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
             <transition>
-                <div id="descriptionText" v-if="isSelected">{{ description }}</div>
+                <pre id="descriptionText" v-if="isSelected">{{ description }}</pre>
                 <!-- <div class="description" :class="{displayDescription: isSelected}"> {{ description }}</div> -->
             </transition>
         </li>
@@ -66,44 +66,47 @@ export default {
     .postingContainer {
         width: 100%;
         display: flex;
-        background-color: #1d2227;
+        background-color: #141819;
         /* color: rgb(247, 246, 237); */
         border-radius: 8px; 
         margin-bottom: 10px;
         height: 120px;
-        transition: all 0.4s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
 
     .postingContainer:hover {
-        background-color: #222c33;
+        background-color: #1c1e29;
     }
 
     .expanded {
         height: 550px;
-        background-color: #222c33;
+        background-color: #1c1e29;
     }
 
     .jobPosting {
         width: 90%;
         height: 120px;
         display: grid;
-        grid-template-rows: 40px 40px 40px;
+        grid-template-rows: 35% 32.5% 32.5%;
         align-items: center;
         overflow: hidden;
-        transition: all 0.4s ease-in-out;
-        padding: 5px;
+        transition: all 0.3s ease-in-out;
     }
 
     .addDescToGrid {
-        grid-template-rows: 40px 40px 40px 415px;
+        grid-template-rows: 6% 6% 6% 78%;
         height: 550px;
+    }
+
+    #title {
+        color: transparent;
+        background: radial-gradient(ellipse at left, rgb(250, 68, 211), rgb(4, 0, 255));
+        background-clip: text;
     }
 
     .title {
         font-family: Barlow Regular;
-        background-color: transparent;
         font-size: 20pt;
-        color: rgb(247, 246, 237);
         height: 100%;
         text-align: left;
         white-space: nowrap;
@@ -112,6 +115,7 @@ export default {
     }
 
     .company {
+        color: rgba(243, 242, 229, 0.897);
         font-family: Barlow Regular;
         background-color: transparent;
         font-size: 18pt;
@@ -121,10 +125,12 @@ export default {
     }
 
     .location {
+        color: rgba(243, 242, 229, 0.897);
         font-family: Barlow Regular;
         background-color: transparent;
         font-size: 14pt;
         height: 100%;
+        margin: auto;
         text-overflow: ellipsis;
 
     }
@@ -133,14 +139,18 @@ export default {
         font-family: Barlow Regular;
         font-size: 14pt;
         height: 100%;
-        overflow-y: scroll;
-        color: rgb(247, 246, 237);
+        line-height: 22px;
+        overflow: auto;
+        text-wrap: wrap;
+        color: rgba(243, 242, 229, 0.897);
         padding-left: 10px;
+        margin: 0px;
+        transform: translate(0px, 15px);
     }
 
     .v-enter-active,
     .v-leave-active {
-        transition: all 0.4s ease;
+        transition: all 0.3s ease-in-out;
     }
 
     .v-enter-from,
@@ -180,8 +190,8 @@ export default {
 
     .info {
         font-family: Barlow Regular;
-        color: rgb(247, 246, 237);
         padding-left: 10px;
+        margin: 0;
     }
 
 </style>

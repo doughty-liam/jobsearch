@@ -46,7 +46,7 @@ export default {
 		provideApolloClient(client)
 		const { result, fetchMore } = useQuery(gql`
 			query getRankedJobs($first: Int, $skip: Int) {
-				jobsBySimilarity(first: $first, skip: $skip, isApplied: true) {
+				jobsBySimilarity(first: $first, skip: $skip, isApplied: false) {
 					id
 					title
 					companyName
@@ -130,7 +130,7 @@ export default {
 
 <style>
 #mainContainer {
-	background-color: rgb(24, 27, 32);
+	background-color: #0e0e0e;
 	display: flex;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
