@@ -27,4 +27,9 @@ pnpm-debug.log*
 db.*
 fonts
 *__pycache__
+linkedinScraper.py
+selenium_text.html
+kitchener_jobs.html
+li_response.html
+linkedin_scraped_jobs.xlsx
 resume.txt

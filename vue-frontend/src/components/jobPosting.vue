@@ -100,7 +100,7 @@ export default {
 
     #title {
         color: transparent;
-        background: radial-gradient(ellipse at left, rgb(250, 68, 211), rgb(4, 0, 255));
+        background: radial-gradient(ellipse at right, rgba(234, 234, 255, 0.751), rgba(159, 158, 229, 0.756), rgba(32, 28, 255, 0.642));
         background-clip: text;
     }
 
