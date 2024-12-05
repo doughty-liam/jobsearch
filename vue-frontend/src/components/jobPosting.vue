@@ -60,7 +60,7 @@ export default {
 
     @font-face {
         font-family: "Barlow Regular";
-        src: url("../../../fonts/Barlow-Regular.ttf ");
+        src: url("../../fonts/Barlow-Regular.ttf ");
     }
 
     .postingContainer {
@@ -100,7 +100,7 @@ export default {
 
     #title {
         color: transparent;
-        background: radial-gradient(ellipse at right, rgba(234, 234, 255, 0.751), rgba(159, 158, 229, 0.756), rgba(32, 28, 255, 0.642));
+        background: rgba(107, 107, 255, 0.774);
         background-clip: text;
     }
 

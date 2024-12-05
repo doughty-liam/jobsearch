@@ -1,10 +1,8 @@
 <template>
 	<div id="mainContainer">
+		<menuBar id="menu"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
-				<!-- <jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"
-					v-on:click="updateJobDetails(job.id, job.title, job.companyName, job.location, job.description)">
-				</jobPosting> -->
 				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied" :description="job.description">
 				</jobPosting>
 			</ul>
@@ -21,6 +19,7 @@
 <script>
 
 import jobPosting from './components/jobPosting.vue'
+import menuBar from './components/menuBar.vue'
 import { ref, watch } from 'vue'
 import gql from 'graphql-tag'
 import { provideApolloClient, useQuery } from '@vue/apollo-composable'
@@ -30,9 +29,7 @@ import client from './apollo-config'
 export default {
 	components: {
 		jobPosting,
-/* 		sortOptions,
-		jobDetails,
-		sortMenu */
+		menuBar
 	},
 
 	setup() {
@@ -96,23 +93,6 @@ export default {
 
 		}
 
-		/* const updateJobDetails = (id, title, companyName, location, description) => {
-			companyName = companyName + " | ";
-
-			selectedJob.value = {
-				id: id,
-				title: title,
-				company: companyName,
-				location: location,
-				description: description
-			}
-
-			const page_title = document.getElementById("page_title");
-			const detailsContainer = document.getElementById("details");
-
-			page_title.innerHTML = title;
-			detailsContainer.style.visibility = "visible";
-		} */
 
 		return {
 			jobs,
@@ -120,7 +100,6 @@ export default {
 			jobsPerPage,
 			pageNum,
 			nextPage,
-			//updateJobDetails,
 			selectedJob
 		}
 	}
@@ -139,18 +118,20 @@ export default {
 	width: 100%;
 	margin: auto;
 	justify-content: center;
+	align-items: center;
+}
+
+#menu {
+	position: absolute;
+	top: 0;
+	width: 100%;
 }
 
 #listContainer {
 	padding-top: 10px;
-	height: calc(100vh - 50px);
+	height: calc(100vh - 100px);
 	width: 40%;
 	overflow-y: scroll;
-	mask-image: linear-gradient(
-		to bottom,
-		rgb(23, 24, 29) 90%,
-		transparent
-	);
 }
 
 #joblist {
