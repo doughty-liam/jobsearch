@@ -158,36 +158,6 @@ export default {
         opacity: 0;
     }
 
-    /* .description {
-        overflow: hidden;   
-        background-color: transparent;
-        font-family: Barlow Regular;
-        padding-left: 10px;
-        padding-top: 20px;
-        overflow-y: auto;
-    }
-
-    .displayDescription {
-        height: 100%;
-        animation: changeDescColor 0.2s linear 1;
-        color: rgb(247, 246, 237);
-    }
-
-    @keyframes changeDescColor {
-        0% {
-            color: transparent;
-        }
-
-        50% {
-            color: linear-gradient(to bottom, transparent 50%, rgb(247, 246, 237) 50%)
-        }
-
-        100% {
-            color: rgb(247, 246, 237);
-
-        }
-    } */
-
     .info {
         font-family: Barlow Regular;
         padding-left: 10px;
