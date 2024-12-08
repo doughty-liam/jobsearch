@@ -8,7 +8,7 @@ class Job(models.Model):
     description = models.CharField(max_length=10000)
     date_added = models.DateField()
     applied = models.BooleanField(default=False)
-    similarity_rating = models.FloatField()
+    link = models.CharField(default="", max_length=200)
 
     def __str__(self):
         return str(self.title)+" | "+str(self.location)

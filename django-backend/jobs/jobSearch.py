@@ -9,12 +9,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-class jobPuller():
+class JobPuller():
 
     def __init__(self):
         load_dotenv()
         
     
+    '''
+    TO DO
+    - Add parameter to be used for the search query
+    - Replace spaces in query with '+'
+    - Add new query parameters into API connection string
+
+    FRONT END: Add input field for this and button to run getJobs()
+    '''
+
     def collect_jobs(self) -> list:
         """
         Query Google Jobs API and save results to a json array.
@@ -24,12 +33,16 @@ class jobPuller():
 
         SERP_KEY = os.getenv("SERP")
         jobs = []
+        next_page_token = ""
 
-        for page in range(0, 10, 10):
-            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=new+grad&location=Toronto&lrad=200&api_key={SERP_KEY}")
+        for page in range(0, 100, 10):
+            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=new+grad&location=Toronto&lrad=200&api_key={SERP_KEY}{next_page_token}")
             # Checking if no more search results were returned
             if "error" not in raw.json().keys():
-                new = raw.json()["jobs_results"]
+                results = raw.json()
+                new = results["jobs_results"]
+                if "serpapi_pagination" in results.keys():
+                    next_page_token = "&next_page_token=" + results["serpapi_pagination"]["next_page_token"]
                 jobs = jobs + new
             else:
                 break
@@ -54,21 +67,22 @@ class jobPuller():
     def clean(self, data:str) -> pd.DataFrame:
         """Clean up job listings in json string format to be appended to database table."""
         
-        jobs = pd.read_json("response.json")
-        print(jobs.columns)
-        # detected_extensions = jobs["detected_extensions"].apply(pd.Series) # Splitting json formatted column of objects into a pandas series
+        jobs = pd.read_json(data)        
         apply_options = jobs["apply_options"].apply(pd.Series)
-
         application_links = []
-        for job in jobs_clean["apply_options"]: # Each element is a list of objects
+
+        for job in jobs["apply_options"]: # Each element is a list of objects
             link_found = False
             for option in job:
-                j = dict(option)
+                j = dict(option) # Convert json string to dict
                 if j["title"] == "LinkedIn":
                     application_links.append(j["link"])
                     link_found = True
             if link_found == False:
-                application_links.append("Unknown")
+                if len(job) > 0:
+                    application_links.append(dict(job[0])["link"])
+                else:
+                    application_links.append("Unknown") # No external link provided
         
         
         apply_options = pd.Series(application_links, name="Link") # Converting "link" and "text" series back to df
@@ -76,7 +90,6 @@ class jobPuller():
         jobs_clean = jobs_clean[["title", "company_name", "location", "description", "Link"]] # Select only required columns
         jobs_clean["date_added"] = dt.date(dt.now())
         jobs_clean["applied"] = False
-        print(jobs_clean)
         return jobs_clean
 
 
@@ -95,9 +108,8 @@ class jobPuller():
         engine = sqla.create_engine("sqlite:///db.sqlite3")
         connection = engine.connect()
         
-        # jobs_jstr = self.collect_jobs()
-        # jobs_df = self.clean(jobs_jstr)
-        jobs_df = self.clean("maymay")
+        jobs_jstr = self.collect_jobs()
+        jobs_df = self.clean(jobs_jstr)
 
         '''
         descriptions = jobs_df[["description"]].to_numpy()
@@ -112,6 +124,6 @@ class jobPuller():
         jobs_df.insert(6, "similarity_rating", similarity_rating)
         '''
 
-        # jobs_df.to_sql("jobs_job", con=engine, index=False, if_exists="append")
+        jobs_df.to_sql("jobs_job", con=engine, index=False, if_exists="append")
 
         connection.close()

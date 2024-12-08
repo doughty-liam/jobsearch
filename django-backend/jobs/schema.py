@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from jobs.models import Job
-from jobSearch import jobPuller
+from jobs.jobSearch import JobPuller
 
 class JobType(DjangoObjectType):
     class Meta:
@@ -9,7 +9,7 @@ class JobType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
-    all_jobs = graphene.List(JobType, first=graphene.Int(required=True), skip=graphene.Int(required=True))
+    all_jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int())
     jobs_by_date_added = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), keyword=graphene.String(required=True))
     jobs_by_similarity = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), isApplied=graphene.Boolean())
     clear_all_jobs = graphene.String()
@@ -44,7 +44,7 @@ class Query(graphene.ObjectType):
         return "Cleared all jobs from the database."
     
     def resolve_get_new_jobs(root, info):
-        puller = jobPuller()
+        puller = JobPuller()
         puller.getJobs()
         return "Database updated."
         

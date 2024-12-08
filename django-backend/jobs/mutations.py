@@ -1,7 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
 from jobs.models import Job
-from jobSearch import jobPuller
 
 class JobType(DjangoObjectType):
     class Meta:
