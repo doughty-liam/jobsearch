@@ -3,7 +3,7 @@
 		<menuBar id="menu"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
-				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied" :description="job.description">
+				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description">
 				</jobPosting>
 			</ul>
 		</div>
@@ -50,6 +50,7 @@ export default {
 					location
 					description
 					applied
+					link
 				}
 			}`,
 			{

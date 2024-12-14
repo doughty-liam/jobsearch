@@ -4,9 +4,10 @@
             <h2 id="title" class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
+            <a id="apply_link" class="info" :href="link">Apply</a>
+
             <transition>
                 <pre id="descriptionText" v-if="isSelected">{{ description }}</pre>
-                <!-- <div class="description" :class="{displayDescription: isSelected}"> {{ description }}</div> -->
             </transition>
         </li>
         <checkMark :applied=applied></checkMark>
@@ -29,7 +30,8 @@ export default {
         location: {required: true, type: String},
         company: {required: true, type: String},
         applied: {required: true, type: Boolean},
-        description: {required: false, type: String}
+        description: {required: false, type: String},
+        link: {required: false, type: String}
     },
 
     setup() {
@@ -40,10 +42,8 @@ export default {
 
             if(isSelected.value == false) {
                 isSelected.value = true
-                console.log("Component was not active.")
             } else {
                 isSelected.value = false
-                console.log("Component was active.")
             }
         }
 
@@ -67,7 +67,6 @@ export default {
         width: 100%;
         display: flex;
         background-color: #141819;
-        /* color: rgb(247, 246, 237); */
         border-radius: 8px; 
         margin-bottom: 10px;
         height: 120px;
@@ -94,7 +93,7 @@ export default {
     }
 
     .addDescToGrid {
-        grid-template-rows: 6% 6% 6% 78%;
+        grid-template-rows: 6% 6% 6% 6% 78%;
         height: 550px;
     }
 
@@ -102,6 +101,24 @@ export default {
         color: transparent;
         background: rgba(107, 107, 255, 0.774);
         background-clip: text;
+    }
+
+    #apply_link {
+        font-family: Barlow Regular;
+        color: rgba(243, 242, 229, 0.897);
+        height: 100%;
+        margin-left: 0;
+        width: fit-content;
+        text-align: left;
+        text-decoration: none;
+        font-size: 15pt;
+        padding: none;
+        transition: ease-in-out 0.3s;
+    }
+
+    #apply_link:hover {
+        font-size: 16pt;
+        color: rgba(107, 107, 255, 0.774);
     }
 
     .title {
@@ -118,7 +135,7 @@ export default {
         color: rgba(243, 242, 229, 0.897);
         font-family: Barlow Regular;
         background-color: transparent;
-        font-size: 18pt;
+        font-size: 15pt;
         height: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -128,7 +145,7 @@ export default {
         color: rgba(243, 242, 229, 0.897);
         font-family: Barlow Regular;
         background-color: transparent;
-        font-size: 14pt;
+        font-size: 15pt;
         height: 100%;
         margin: auto;
         text-overflow: ellipsis;
