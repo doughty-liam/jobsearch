@@ -42,8 +42,8 @@ export default {
 
 		provideApolloClient(client)
 		const { result, fetchMore } = useQuery(gql`
-			query getAllJobs($first: Int, $skip: Int){
-				allJobs(first: $first , skip: $skip){
+			query getJobs($first: Int, $skip: Int, $keywordSet: String){
+				jobsByDateAdded(first: $first , skip: $skip, keywordSet: $keywordSet ){
 					id
 					title
 					companyName
@@ -55,14 +55,14 @@ export default {
 			}`,
 			{
 				first: jobsPerPage.value,
-				skip: offset.value
+				skip: offset.value,
+				keywordSet: "2025,june"
 			}
 		)
 
 		watch(result, (newResult) => {
-			if (newResult && newResult.allJobs) {
-				jobs.value = newResult.allJobs
-				console.log(jobs.value)
+			if (newResult && newResult.jobsByDateAdded) {
+				jobs.value = newResult.jobsByDateAdded
 			}
 		})
 
@@ -126,6 +126,7 @@ export default {
 	position: absolute;
 	top: 0;
 	width: 100%;
+	height: 4%;
 }
 
 #listContainer {
