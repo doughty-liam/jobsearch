@@ -1,6 +1,6 @@
 <template>
 	<div id="mainContainer">
-		<menuBar id="menu"></menuBar>
+		<menuBar id="menu" @update-keywords="newKeywords"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
 				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description">
@@ -34,6 +34,7 @@ export default {
 
 	setup() {
 		const jobsPerPage = ref(20)
+		const keywordSet = ref("")
 		const offset = ref(0)
 		const pageNum = ref(1)
 		const jobs = ref([])
@@ -41,7 +42,7 @@ export default {
 
 
 		provideApolloClient(client)
-		const { result, fetchMore } = useQuery(gql`
+		const { result, fetchMore, refetch } = useQuery(gql`
 			query getJobs($first: Int, $skip: Int, $keywordSet: String){
 				jobsByDateAdded(first: $first , skip: $skip, keywordSet: $keywordSet ){
 					id
@@ -56,7 +57,7 @@ export default {
 			{
 				first: jobsPerPage.value,
 				skip: offset.value,
-				keywordSet: "2025,june"
+				keywordSet: keywordSet.value
 			}
 		)
 
@@ -86,12 +87,21 @@ export default {
 				updateQuery: (result, {fetchMoreResult}) => {
 					if(!fetchMoreResult) return result
 					
-					jobs.value = fetchMoreResult.allJobs
-					console.log(jobs.value)
-
+					jobs.value = fetchMoreResult.jobsByDateAdded
 				}
 			})
 
+		}
+
+		const newKeywords = async (keywords) => {
+			offset.value = 0;
+			pageNum.value = 1;
+			keywordSet.value = keywords;
+			refetch({
+				first: jobsPerPage.value,
+				skip: offset.value,
+				keywordSet: keywordSet.value
+			})
 		}
 
 
@@ -101,7 +111,9 @@ export default {
 			jobsPerPage,
 			pageNum,
 			nextPage,
-			selectedJob
+			newKeywords,
+			selectedJob,
+			refetch
 		}
 	}
 }
@@ -126,12 +138,12 @@ export default {
 	position: absolute;
 	top: 0;
 	width: 100%;
-	height: 4%;
+	height: 4vh;
 }
 
 #listContainer {
 	padding-top: 10px;
-	height: calc(100vh - 100px);
+	height: 88vh;
 	width: 40%;
 	overflow-y: scroll;
 }
