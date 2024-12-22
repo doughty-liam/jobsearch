@@ -124,21 +124,21 @@ export default {
 #mainContainer {
 	background-color: #0e0e0e;
 	display: flex;
+	flex-direction: column;
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	height: 100vh;
-	width: 100%;
-	margin: auto;
 	justify-content: center;
 	align-items: center;
+	height: 100%;
+	width: 100%;
 }
 
 #menu {
 	position: absolute;
 	top: 0;
 	width: 100%;
-	height: 4vh;
+	height: 4%;
 }
 
 #listContainer {
@@ -146,6 +146,7 @@ export default {
 	height: 88vh;
 	width: 40%;
 	overflow-y: scroll;
+	background-color: red;
 }
 
 #joblist {
@@ -179,8 +180,7 @@ export default {
 }
 
 #resultsNav {
-	position: absolute;
-	bottom: 0px;
+	background-color: purple;
 	height: 50px;
 	width: 100%;
 	display: flex;
