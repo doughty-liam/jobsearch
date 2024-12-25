@@ -1,5 +1,5 @@
 <template>
-	<div id="mainContainer">
+	<div id="main">
 		<menuBar id="menu" @update-keywords="newKeywords"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
@@ -8,10 +8,12 @@
 			</ul>
 		</div>
 		<div id="resultsNav">
-				<!-- This whole div should be its own component -->
+			<!-- This whole div should be its own component -->
+			<div id="pagenav-buttons">
 				<button id="pageBack" class="pageNav" @click="nextPage(0)">&#8249;</button>
 				<div id="pageNum">{{ pageNum }}</div>
 				<button id="pageForward" class="pageNav" @click="nextPage(1)">&#8250;</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -121,82 +123,95 @@ export default {
 </script>
 
 <style>
-#mainContainer {
-	background-color: #0e0e0e;
-	display: flex;
-	flex-direction: column;
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-	width: 100%;
-}
 
-#menu {
-	position: absolute;
-	top: 0;
-	width: 100%;
-	height: 4%;
-}
+	@font-face {
+		font-family: "Barlow Regular";
+		src: url("../fonts/Barlow-Regular.ttf ");
+	}
 
-#listContainer {
-	padding-top: 10px;
-	height: 88vh;
-	width: 40%;
-	overflow-y: scroll;
-	background-color: red;
-}
+	#main {
+		height: 100vh;
+		width: 100vw;
+	}
 
-#joblist {
-	margin: 0px;
-	padding: 0px;
-}
+	#menu {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 6%;
+	}
 
-#pageNum {
-	height: 100%;
-	width: 5%;
-	text-align: center;
-	line-height: 50px;
-	font-size: 16pt;
-	color: rgb(217, 217, 217);
-}
+	#listContainer {
+		position: absolute;
+		top: 6%;
+		height: 88%;
+		width: 100%;
+		overflow-y: scroll;
+		background-color: rgb(17 25 37);
+	}
 
-.pageNav {
-	background-color: transparent;
-	color: rgb(217, 217, 217);
-	width: 40px;
-	border: none;
-	font-size: 30pt;
-	height: 100%;
-	margin-bottom: 5px;
-	
-}
+	#joblist {
+		width: 40%;
+		padding: 0;
+		margin: auto;
+		background-color:rgb(17 25 37);
+	}
 
-.pageNav:hover {
-	transition-duration: 300ms;
-	color: #0d5c87;
-}
 
-#resultsNav {
-	background-color: purple;
-	height: 50px;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
+	#resultsNav {
+		position: absolute;
+		top: 94%;
+		height: 6%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: rgb(17 25 37);
+	}
 
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
+	#pagenav-buttons {
+		width: 8%;
+		height: 100%;
+		display: inline-flex;
+	}
 
-::-webkit-scrollbar {
-	width: 0px;
-	background: transparent;
-}
+	#pageNum {
+		font-family: Barlow Regular;
+		height: 100%;
+		width: 30%;
+		margin: auto;
+		align-content: center;
+		padding-top: 2%;
+		text-align: center;
+		font-size: 16pt;
+		color: rgb(217, 217, 217);
+	}
+
+	.pageNav {
+		background-color: transparent;
+		color: rgb(217, 217, 217);
+		width: 40px;
+		border: none;
+		font-size: 30pt;
+		height: 100%;
+		margin-bottom: 5px;
+		
+	}
+
+	.pageNav:hover {
+		transition-duration: 300ms;
+		color: #0d5c87;
+	}
+
+	input::-webkit-inner-spin-button,
+	input::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	::-webkit-scrollbar {
+		width: 0px;
+		background: transparent;
+	}
 
 </style>

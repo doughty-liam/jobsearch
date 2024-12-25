@@ -66,8 +66,9 @@ export default {
     .postingContainer {
         width: 100%;
         display: flex;
-        background-color: #141819;
-        border-radius: 8px; 
+        background-color:#003241;
+        border-radius: 8px;
+        padding: 0;
         margin-bottom: 10px;
         height: 120px;
         transition: all 0.3s ease-in-out;
@@ -83,7 +84,7 @@ export default {
     }
 
     .jobPosting {
-        width: 90%;
+        width: 100%;
         height: 120px;
         display: grid;
         grid-template-rows: 35% 32.5% 32.5%;
@@ -99,7 +100,7 @@ export default {
 
     #title {
         color: transparent;
-        background: rgba(107, 107, 255, 0.774);
+        background: rgba(243, 242, 229, 0.897);
         background-clip: text;
     }
 
