@@ -2,8 +2,9 @@
     <div>
         <div id="menubar">
             <div id="left">
-                <div id="menu-btn-container">
-                    <font-awesome-icon icon="bars" color="white" size="3x"/>
+                <div id="query-select-container">
+                    <label class="global-text" id="query-select-label">query select</label>
+                    <font-awesome-icon icon="magnifying-glass" color="white" size="xl"/>
                 </div>
                 <!-- <input type="checkbox" id="check">
                 <label for="check" class="checkbtn">
@@ -94,17 +95,21 @@ export default {
     align-content: center;
     border-radius: 20px;
     border-color: transparent;
-    background-color: #003241;
+    background-color: #203643;
+    transition: 0.15s ease-in-out;
 
 }
 
 .menu-btn:hover {
-    background-color: #0743685e;
+    background-color: #1d2734;
 }
 
 #left {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 #right {
@@ -122,18 +127,23 @@ export default {
     align-items: center;
 }
 
-#query-selector {
+#query-select-container {
+    height: 75%;
     display: flex;
-    text-align: center;
-    align-items: center;
     justify-content: flex-start;
+    align-items: center;
+    margin-left: 2%;
+    color: white;
+    background-color: #203643;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-#menu-btn-container {
-    height: 100%;
-    justify-content: center;
-    align-items: center;
+#query-select-label {
+    margin-right: 10px;
 }
+
 #search_wrap {
     width: 80%;
     height: 70%;

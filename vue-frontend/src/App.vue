@@ -138,13 +138,13 @@ export default {
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 6%;
+		height: 8%;
 	}
 
 	#listContainer {
 		position: absolute;
-		top: 6%;
-		height: 88%;
+		top: 8%;
+		height: 86%;
 		width: 100%;
 		overflow-y: scroll;
 		background-color: rgb(17 25 37);

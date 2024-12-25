@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "Barlow Regular";
+    src: url("../../../fonts/Barlow-Regular.ttf");
+}
+
+
+.global-text {
+    font-family: Barlow Regular;
+    color: rgb(217, 217, 217);
+    font-size: 14pt;
+}

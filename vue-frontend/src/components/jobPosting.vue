@@ -66,21 +66,21 @@ export default {
     .postingContainer {
         width: 100%;
         display: flex;
-        background-color:#003241;
+        background-color: #203643;
         border-radius: 8px;
         padding: 0;
         margin-bottom: 10px;
         height: 120px;
-        transition: all 0.3s ease-in-out;
+        transition: all 0.15s ease-in-out;
     }
 
     .postingContainer:hover {
-        background-color: #1c1e29;
+        background-color: #1d2734;
     }
 
     .expanded {
         height: 550px;
-        background-color: #1c1e29;
+        background-color: #1d2734;
     }
 
     .jobPosting {
