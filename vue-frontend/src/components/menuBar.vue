@@ -2,19 +2,16 @@
     <div>
         <div id="menubar">
             <div id="left">
-                <div id="query-select-container">
+                <div id="query-select-container" @click="querySelectOpen = !querySelectOpen">
                     <label class="global-text" id="query-select-label">query select</label>
                     <font-awesome-icon icon="magnifying-glass" color="white" size="xl"/>
                 </div>
-                <!-- <input type="checkbox" id="check">
-                <label for="check" class="checkbtn">
-                </label>
-                <div class="nav-mobile">
-                    <a href="#">Home</a>
-                    <a href="#">About</a>
-                    <a href="#">Services</a>
-                    <a href="#">Contact</a>
-                </div> -->
+                <nav class="query-select-dropdown" :class="{'query-select-open': querySelectOpen}">
+                    <a class="query-option global-text" href="#">Home</a>
+                    <a class="query-option global-text" href="#">About</a>
+                    <a class="query-option global-text" href="#">Services</a>
+                    <a class="query-option global-text" href="#">Contact</a>
+                </nav>
             </div>
             <div id="center">
                 <div class="menu-item" id="search_wrap">
@@ -41,7 +38,8 @@ import gql from 'graphql-tag'; */
 export default {
     data() {
         return {
-            keywordStr: ""
+            keywordStr: "",
+            querySelectOpen: false
         }
     },
     methods: {
@@ -132,7 +130,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-left: 2%;
+    margin-left: 10px;
     color: white;
     background-color: #203643;
     border-radius: 20px;
@@ -188,37 +186,27 @@ export default {
     color: white;
 }
 
-nav {
- padding: 1.5rem 2rem;
- background-color: #222831;
- color: #fff;
+.query-select-dropdown {
+    position: absolute;
+    top: 100%;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    width: 15vw;
+    height: 15vh;
+    transform: scaleY(0);
+    transform-origin: top center;
+    transition-duration: 150ms;
 }
 
-.checkbtn {
- font-size: 1.5rem;
- color: white;
- cursor: pointer;
+.query-select-open {
+    transform: scaleY(1);
+    transform-origin: top center;
 }
 
-.nav-mobile {
- display: none;
-}
+.query-option {
+    margin: auto;
 
-#check:checked ~ .nav-mobile {
- display: block;
-}
-
-.nav-mobile {
- position: absolute;
- top: 4.5rem;
- left: 0;
- background: #222831;
- z-index: 1;
- width: 200px;
-}
-.nav-mobile a {
- color: #fff;
- padding: 1rem 1.5rem;
- display: block;
 }
 </style>
