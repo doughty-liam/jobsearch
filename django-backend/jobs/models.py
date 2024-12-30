@@ -7,6 +7,7 @@ class Job(models.Model):
     location = models.CharField(max_length=50)
     description = models.CharField(max_length=10000)
     date_added = models.DateField()
+    shortlisted = models.BooleanField(default=False)
     applied = models.BooleanField(default=False)
     link = models.CharField(default="", max_length=200)
 

@@ -31,9 +31,9 @@
 
 <script>
 
-/* import { provideApolloClient, useQuery } from '@vue/apollo-composable';
+import { provideApolloClient, useQuery } from '@vue/apollo-composable';
 import client from "../apollo-config"
-import gql from 'graphql-tag'; */
+import gql from 'graphql-tag';
 
 export default {
     data() {
@@ -48,14 +48,13 @@ export default {
         },
 
         collectNewJobs() {
-            /* const q = gql`query collectNewJobs {
+            const q = gql`query collectNewJobs {
                 getNewJobs
             }`;
             provideApolloClient(client);
 
             const {result} = useQuery(q);
-            console.log(result); */
-            console.log("Get new jobs clicked.")
+            console.log(result);
 
         }
     }

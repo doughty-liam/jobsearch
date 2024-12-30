@@ -4,8 +4,11 @@
             <h2 id="title" class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
-            <a id="apply_link" class="info" :href="link">Apply</a>
-
+            <div class="job-actions">
+                <button class="action-btn" >shortlist</button>
+                <button class="action-btn" >applied</button>
+                <button id="apply_link" class="action-btn" :href="link">apply</button>
+            </div>
             <transition>
                 <pre id="descriptionText" v-if="isSelected">{{ description }}</pre>
             </transition>
@@ -104,24 +107,6 @@ export default {
         background-clip: text;
     }
 
-    #apply_link {
-        font-family: Barlow Regular;
-        color: rgba(243, 242, 229, 0.897);
-        height: 100%;
-        margin-left: 0;
-        width: fit-content;
-        text-align: left;
-        text-decoration: none;
-        font-size: 15pt;
-        padding: none;
-        transition: ease-in-out 0.3s;
-    }
-
-    #apply_link:hover {
-        font-size: 16pt;
-        color: rgba(107, 107, 255, 0.774);
-    }
-
     .title {
         font-family: Barlow Regular;
         font-size: 20pt;
@@ -178,8 +163,36 @@ export default {
 
     .info {
         font-family: Barlow Regular;
+        line-height: 100%;
+        align-content: center;
         padding-left: 10px;
         margin: 0;
+    }
+
+    .job-actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        margin: auto;
+    }
+
+    .action-btn {
+        margin-left: 10px;
+        width: 100px;
+        font-size: 14pt;
+        font-family: Barlow Regular;
+        color: #383f4d;
+        background-color: #6b92b9;
+        border-radius: 10px;
+        border-color: transparent;
+        transition: box-shadow 120ms ease-in-out, color 300ms ease-in-out;
+    }
+
+    .action-btn:hover {
+        border-width: 0;
+        box-shadow: inset 100px 0 0 0 rgb(8, 14, 49);
+        box-sizing: border-box;
+        color: white;
     }
 
 </style>
