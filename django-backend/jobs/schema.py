@@ -15,6 +15,7 @@ class Query(graphene.ObjectType):
     jobs_by_similarity = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), isApplied=graphene.Boolean())
     clear_all_jobs = graphene.String()
     get_new_jobs = graphene.String()
+    shortlisted_jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int())
 
     def resolve_all_jobs(root, info, first, skip):
         qs = Job.objects.all()
@@ -51,6 +52,15 @@ class Query(graphene.ObjectType):
         if first:
             qs = qs[:first]
         return qs
+    
+    def resolve_shortlisted_jobs(root, info, first, skip):
+        qs = Job.objects.all().filter(shortlisted=True)
+        if skip:
+            qs = qs[skip:]
+        if first:
+            qs = qs[:first]
+        return qs
+
 
     def resolve_clear_all_jobs(root, info):
         Job.objects.all().delete()

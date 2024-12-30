@@ -1,18 +1,19 @@
 <template>
-    <div class="postingContainer" :class="{expanded: isSelected}" @click="testFunc()">
+    <div class="postingContainer" :class="{expanded: isSelected}" @click="expandJob()">
         <li class="jobPosting" :class="{addDescToGrid: isSelected}">
             <h2 id="title" class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
             <div class="job-actions">
-                <button class="action-btn" >shortlist</button>
-                <button class="action-btn" >applied</button>
-                <button id="apply_link" class="action-btn" :href="link">apply</button>
+                <button class="action-btn" @click.stop="shortlistJob({ id })">shortlist</button>
+                <button class="action-btn" @click.stop>applied</button>
+                <button id="apply_link" class="action-btn" :href="link" @click.stop>apply</button>
             </div>
             <transition>
                 <pre id="descriptionText" v-if="isSelected">{{ description }}</pre>
             </transition>
         </li>
+        <!-- Switch to using fontawsome checkmark AND add a shortlist icon using fontawesome 'list' -->
         <checkMark :applied=applied></checkMark>
         <!-- insert checkMark component -->
     </div>
@@ -22,14 +23,20 @@
 
 import checkMark from './checkMark.vue'
 import {ref} from 'vue'
+import { provideApolloClient, useMutation } from '@vue/apollo-composable';
+import client from "../apollo-config"
+import gql from 'graphql-tag';
 
 export default {
     
+    // TO DO
+    // This entire script should be reformatted using 'data' and 'methods' objects
     components: {
         checkMark
     },
     props: {
         title: {required: true, type: String},
+        id: {required: true, type: String},
         location: {required: true, type: String},
         company: {required: true, type: String},
         applied: {required: true, type: Boolean},
@@ -39,9 +46,11 @@ export default {
 
     setup() {
         
+        provideApolloClient(client)
+
         var isSelected = ref(false)
 
-        const testFunc = () => {
+        const expandJob = () => {
 
             if(isSelected.value == false) {
                 isSelected.value = true
@@ -50,9 +59,29 @@ export default {
             }
         }
 
+        const shortlistJob = (jobid) => {
+            const q = gql`
+            mutation shortlistJob {
+                shortlistJob(jobid: $jobid, shortlist: $shortlist) {
+                    id
+                    shortlisted
+                    title
+                }
+            }`
+
+            const {result} = useMutation(q,
+            {
+                jobid: jobid,
+                shortlist: true
+            })
+
+            console.log(result)
+        }
+
         return {
-            testFunc,
-            isSelected
+            expandJob,
+            isSelected,
+            shortlistJob
         }
     }
 }
@@ -61,6 +90,9 @@ export default {
 
 <style scoped>
 
+    /* TO DO
+        1. Test 'cursor: default' and 'user-select: none' to stop blinking caret
+    */
     @font-face {
         font-family: "Barlow Regular";
         src: url("../../fonts/Barlow-Regular.ttf ");
