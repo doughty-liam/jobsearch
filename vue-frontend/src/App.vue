@@ -3,7 +3,7 @@
 		<menuBar id="menu" @update-keywords="newKeywords"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
-				<jobPosting :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description">
+				<jobPosting @refresh="refetch({first: jobsPerPage.value, skip: offset.value, keywordSet: keywordSet.value})" :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description" :shortlisted="job.shortlisted">
 				</jobPosting>
 			</ul>
 		</div>
@@ -54,6 +54,7 @@ export default {
 					description
 					applied
 					link
+					shortlisted
 				}
 			}`,
 			{
@@ -106,6 +107,14 @@ export default {
 			})
 		}
 
+		const simpleRefresh = async () => {
+			refetch({
+				first: jobsPerPage.value,
+				skip: offset.value,
+				keywordSet: keywordSet.value
+			})
+		}
+
 
 		return {
 			jobs,
@@ -115,7 +124,8 @@ export default {
 			nextPage,
 			newKeywords,
 			selectedJob,
-			refetch
+			refetch,
+			simpleRefresh
 		}
 	}
 }

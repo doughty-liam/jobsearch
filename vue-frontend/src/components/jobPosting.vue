@@ -5,7 +5,7 @@
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
             <div class="job-actions">
-                <button class="action-btn" @click.stop="shortlistJob({ id })">shortlist</button>
+                <button class="action-btn" @click.stop="shortlistJob({ id })">{{ shortlisted ? "unshortlist" : "shortlist" }}</button>
                 <button class="action-btn" @click.stop>applied</button>
                 <button id="apply_link" class="action-btn" :href="link" @click.stop>apply</button>
             </div>
@@ -41,7 +41,8 @@ export default {
         company: {required: true, type: String},
         applied: {required: true, type: Boolean},
         description: {required: false, type: String},
-        link: {required: false, type: String}
+        link: {required: false, type: String},
+        shortlisted: {required: true, type: Boolean}
     },
 
     setup() {
@@ -62,20 +63,19 @@ export default {
         const shortlistJob = (jobid) => {
             const q = gql`
             mutation shortlistJob {
-                shortlistJob(jobid: $jobid, shortlist: $shortlist) {
+                shortlistJob(jobid: $jobid) {
                     id
                     shortlisted
                     title
                 }
             }`
 
-            const {result} = useMutation(q,
+            useMutation(q,
             {
-                jobid: jobid,
-                shortlist: true
+                jobid: jobid.id,
             })
-
-            console.log(result)
+            this.$emit("refresh")
+            console.log(jobid.id + "shortlisted.")
         }
 
         return {

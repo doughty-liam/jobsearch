@@ -27,18 +27,17 @@ class job_shortlist(graphene.Mutation):
     
     id = graphene.Int()
     title = graphene.String()
-    shortlist = graphene.Boolean()
+    shortlisted = graphene.Boolean()
 
     class Arguments:
         jobid = graphene.Int()
-        shortlist = graphene.Boolean()
 
-    def mutate(cls, info, jobid, shortlist):
+    def mutate(cls, info, jobid):
         job = Job.objects.get(id=jobid)
-        job.shortlisted = shortlist
+        job.shortlisted = not job.shortlisted
         job.save()
 
-        return job_shortlist(id=job.id, title=job.title, shortlist=job.shortlisted)
+        return job_shortlist(id=job.id, title=job.title, shortlisted=job.shortlisted)
 
     
 class Mutation(graphene.ObjectType):

@@ -1,0 +1,10 @@
+TO DO
+- Apply migrations to Job model
+- Create query in schema.py to shortlist a job given its ID
+- Run this query when "shortlist" btn is clicked.
+- Change button text to "shortlisted" if [shortlist] = True
+
+
+ALSO TO DO
+- Make it so opening and closing a job posting only happens when specific spots are clicked
+- Make new queries for - only applied, only shortlisted
