@@ -1,11 +1,11 @@
 <template>
-    <div class="postingContainer" :class="{expanded: isSelected}" @click="expandJob()">
+    <div class="postingContainer" :class="{expanded: isSelected, shortlisted: shortlisted}" @click="isSelected = !isSelected">
         <li class="jobPosting" :class="{addDescToGrid: isSelected}">
             <h2 id="title" class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
             <div class="job-actions">
-                <button class="action-btn" @click.stop="shortlistJob({ id })">{{ shortlisted ? "unshortlist" : "shortlist" }}</button>
+                <button class="action-btn" @click.stop="shortlistRefresh({id})">{{ shortlisted ? "unshortlist" : "shortlist" }}</button>
                 <button class="action-btn" @click.stop>applied</button>
                 <button id="apply_link" class="action-btn" :href="link" @click.stop>apply</button>
             </div>
@@ -22,7 +22,6 @@
 <script>
 
 import checkMark from './checkMark.vue'
-import {ref} from 'vue'
 import { provideApolloClient, useMutation } from '@vue/apollo-composable';
 import client from "../apollo-config"
 import gql from 'graphql-tag';
@@ -45,43 +44,47 @@ export default {
         shortlisted: {required: true, type: Boolean}
     },
 
+    data() {
+        return {
+            isSelected: false
+
+        }
+    },
+
     setup() {
         
         provideApolloClient(client)
 
-        var isSelected = ref(false)
-
-        const expandJob = () => {
-
-            if(isSelected.value == false) {
-                isSelected.value = true
-            } else {
-                isSelected.value = false
+        const q = gql`
+        mutation shortlistMutation($jobid: Int) {
+            shortlistJob(jobid: $jobid){
+                id
+                title
+                shortlisted
             }
-        }
+        }`
 
-        const shortlistJob = (jobid) => {
-            const q = gql`
-            mutation shortlistJob {
-                shortlistJob(jobid: $jobid) {
-                    id
-                    shortlisted
-                    title
-                }
-            }`
-
-            useMutation(q,
-            {
-                jobid: jobid.id,
-            })
-            this.$emit("refresh")
-            console.log(jobid.id + "shortlisted.")
-        }
+        const {mutate: shortlistJob, onDone} = useMutation(q)
 
         return {
-            expandJob,
-            isSelected,
-            shortlistJob
+            shortlistJob,
+            onDone
+        }
+    },
+
+    methods: {
+        shortlistRefresh(jobid) {
+
+            this.shortlistJob(
+                {
+                    jobid: Number(jobid.id)
+                }
+            )
+            
+            
+            this.onDone(() => {
+                this.$emit("refresh")
+            })
         }
     }
 }
@@ -92,6 +95,7 @@ export default {
 
     /* TO DO
         1. Test 'cursor: default' and 'user-select: none' to stop blinking caret
+        2. Look at using the 'bookmark' icons for shortlist/unshortlist
     */
     @font-face {
         font-family: "Barlow Regular";
@@ -115,7 +119,6 @@ export default {
 
     .expanded {
         height: 550px;
-        background-color: #1d2734;
     }
 
     .jobPosting {
@@ -225,6 +228,14 @@ export default {
         box-shadow: inset 100px 0 0 0 rgb(8, 14, 49);
         box-sizing: border-box;
         color: white;
+    }
+
+    .shortlisted {
+        background-color: #3a676b;
+    }
+
+    .shortlisted:hover {
+        background-color: #29595e;
     }
 
 </style>

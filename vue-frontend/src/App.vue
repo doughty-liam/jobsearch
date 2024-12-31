@@ -3,7 +3,7 @@
 		<menuBar id="menu" @update-keywords="newKeywords"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
-				<jobPosting @refresh="refetch({first: jobsPerPage.value, skip: offset.value, keywordSet: keywordSet.value})" :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description" :shortlisted="job.shortlisted">
+				<jobPosting @refresh="simpleRefresh()" :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description" :shortlisted="job.shortlisted">
 				</jobPosting>
 			</ul>
 		</div>
@@ -27,7 +27,11 @@ import gql from 'graphql-tag'
 import { provideApolloClient, useQuery } from '@vue/apollo-composable'
 import client from './apollo-config'
 
-
+/* TO DO
+1. Double-check logic for refreshing with new keywords - ensure that page/offset params
+   will be reset.
+2. Fix animation when expanding a job.	
+*/
 export default {
 	components: {
 		jobPosting,
