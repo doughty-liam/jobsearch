@@ -7,10 +7,9 @@
                     <font-awesome-icon icon="magnifying-glass" color="white" size="xl"/>
                 </div>
                 <nav class="query-select-dropdown" :class="{'query-select-open': querySelectOpen}">
-                    <a class="query-option global-text" href="#">Home</a>
-                    <a class="query-option global-text" href="#">About</a>
-                    <a class="query-option global-text" href="#">Services</a>
-                    <a class="query-option global-text" href="#">Contact</a>
+                    <a class="query-option query-all" @click="$emit('selectQuery', 'all')">All</a>
+                    <a class="query-option query-shortlisted" @click="$emit('selectQuery', 'shortlisted')">Shortlisted</a>
+                    <a class="query-option query-applied" @click="$emit('selectQuery', 'applied')">Applied</a>
                 </nav>
             </div>
             <div id="center">
@@ -205,7 +204,15 @@ export default {
 }
 
 .query-option {
-    margin: auto;
-
+    user-select: none;
+    background-color: black;
+    color: white;
+    width: 80%;
 }
+
+.query-option:hover {
+    background-color: rgb(44, 42, 42);
+}
+
+
 </style>

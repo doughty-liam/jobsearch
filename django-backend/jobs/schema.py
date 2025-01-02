@@ -10,12 +10,20 @@ class JobType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
+    '''
+    IDIOT!!!
+
+    The filtering should all be done in ONE query as a result of the parameters passed.
+    Sort order, applied or unapplied, shortlisted etc should be passed as a VARIABLE
+    
+    '''
+
     all_jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int())
     jobs_by_date_added = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), keywordSet=graphene.String())
     jobs_by_similarity = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), isApplied=graphene.Boolean())
     clear_all_jobs = graphene.String()
     get_new_jobs = graphene.String()
-    shortlisted_jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int())
+    shortlisted_jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), keywordSet=graphene.String())
 
     def resolve_all_jobs(root, info, first, skip):
         qs = Job.objects.all()
@@ -53,8 +61,16 @@ class Query(graphene.ObjectType):
             qs = qs[:first]
         return qs
     
-    def resolve_shortlisted_jobs(root, info, first, skip):
-        qs = Job.objects.all().filter(shortlisted=True)
+    def resolve_shortlisted_jobs(root, info, first, skip, keywordSet):
+        
+        keywords = keywordSet.split(",") # Separate keywords by comma delim
+        keyword_qset = Q()
+        for word in keywords:
+            keyword_qset &= Q(description__contains=word)
+        
+
+        qs = Job.objects.order_by('-date_added').filter(keyword_qset, shortlisted=True)
+
         if skip:
             qs = qs[skip:]
         if first:

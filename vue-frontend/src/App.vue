@@ -1,6 +1,6 @@
 <template>
 	<div id="main">
-		<menuBar id="menu" @update-keywords="newKeywords"></menuBar>
+		<menuBar id="menu" @update-keywords="newKeywords" @selectQuery="newQuerySelected"></menuBar>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
 				<jobPosting @refresh="simpleRefresh()" :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description" :shortlisted="job.shortlisted">
@@ -38,6 +38,23 @@ export default {
 		menuBar
 	},
 
+	data() {
+		return {
+			shortlistedJobsQ: gql`
+			query getShortlisted($first: Int, $skip: Int, $keywordSet: String){
+				shortlistedJobs(first: $first , skip: $skip, keywordSet: $keywordSet ){
+					id
+					title
+					companyName
+					description
+					applied
+					link
+					shortlisted
+				}
+			}`,
+		}
+	},
+
 	setup() {
 		const jobsPerPage = ref(20)
 		const keywordSet = ref("")
@@ -46,21 +63,22 @@ export default {
 		const jobs = ref([])
 		const selectedJob = ref({})
 
+		const allJobsQ = ref(gql`
+		query getJobs($first: Int, $skip: Int, $keywordSet: String){
+			jobsByDateAdded(first: $first , skip: $skip, keywordSet: $keywordSet ){
+				id
+				title
+				companyName
+				location
+				description
+				applied
+				link
+				shortlisted
+			}
+		}`)
 
 		provideApolloClient(client)
-		const { result, fetchMore, refetch } = useQuery(gql`
-			query getJobs($first: Int, $skip: Int, $keywordSet: String){
-				jobsByDateAdded(first: $first , skip: $skip, keywordSet: $keywordSet ){
-					id
-					title
-					companyName
-					location
-					description
-					applied
-					link
-					shortlisted
-				}
-			}`,
+		const { result, fetchMore, refetch } = useQuery(allJobsQ,
 			{
 				first: jobsPerPage.value,
 				skip: offset.value,
@@ -121,15 +139,49 @@ export default {
 
 
 		return {
-			jobs,
 			offset,
+			jobs,
 			jobsPerPage,
 			pageNum,
 			nextPage,
 			newKeywords,
 			selectedJob,
 			refetch,
-			simpleRefresh
+			simpleRefresh,
+			allJobsQ
+		}
+	},
+
+	methods: {
+		newQuerySelected(qname) {	
+
+			if(qname == "all") {
+				const {result, loading} = useQuery(this.allJobsQ, {
+						first: this.jobsPerPage,
+						skip: this.offset,
+						keywordSet: ""
+					}
+				)
+				if(!loading) {
+					console.log(result)
+				}
+			} else if(qname == "shortlisted") {
+
+				const {result} = useQuery(this.shortlistedJobsQ, {
+						first: this.jobsPerPage,
+						skip: this.offset,
+						keywordSet: ""
+					}
+				)
+
+				console.log(result)
+				// this.jobs = result.shortlistedJobs
+				// console.log(this.jobs)
+
+			} else if(qname == "applied") {
+				console.log("Fetching applied jobs")
+			}
+
 		}
 	}
 }
