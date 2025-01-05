@@ -8,6 +8,15 @@ class JobType(DjangoObjectType):
     class Meta:
         model = Job
 
+class FilterParamsType(graphene.InputObjectType):
+    '''
+    Defines the filter/sort parameter input for the 'jobs' query.
+    '''
+
+    shortlisted = graphene.Boolean()
+    applied = graphene.Boolean()
+    keyword_str = graphene.String()
+
 class Query(graphene.ObjectType):
 
     '''
@@ -24,6 +33,7 @@ class Query(graphene.ObjectType):
     clear_all_jobs = graphene.String()
     get_new_jobs = graphene.String()
     shortlisted_jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), keywordSet=graphene.String())
+    jobs = graphene.List(JobType, first=graphene.Int(), skip=graphene.Int(), filterParams=FilterParamsType())
 
     def resolve_all_jobs(root, info, first, skip):
         qs = Job.objects.all()
@@ -70,6 +80,31 @@ class Query(graphene.ObjectType):
         
 
         qs = Job.objects.order_by('-date_added').filter(keyword_qset, shortlisted=True)
+
+        if skip:
+            qs = qs[skip:]
+        if first:
+            qs = qs[:first]
+        return qs
+
+
+    def resolve_jobs(root, info, first, skip, filterParams):
+        
+        # Vars will be a dictionary containing the filter/sort parameters
+
+        shortlisted_q = Q(shortlisted=filterParams.shortlisted)
+        applied_q = Q(applied=filterParams.applied)
+
+        
+        # Processing provided search keywords
+        keyword_strs = filterParams.keyword_str.split(",")
+        keyword_qset = Q()
+        for word in keyword_strs:
+            keyword_qset &= Q(description__contains=word)
+
+        filter_qset = shortlisted_q & applied_q & keyword_qset
+
+        qs = Job.objects.order_by('-date_added').filter(filter_qset)
 
         if skip:
             qs = qs[skip:]

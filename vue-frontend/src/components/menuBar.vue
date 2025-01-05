@@ -2,15 +2,10 @@
     <div>
         <div id="menubar">
             <div id="left">
-                <div id="query-select-container" @click="querySelectOpen = !querySelectOpen">
-                    <label class="global-text" id="query-select-label">query select</label>
-                    <font-awesome-icon icon="magnifying-glass" color="white" size="xl"/>
+                <div id="title">
+                    <font-awesome-icon icon="briefcase" size="x0.5" style="padding-right: 15px; color: rgb(81, 130, 155)"/>
+                    Job Finder
                 </div>
-                <nav class="query-select-dropdown" :class="{'query-select-open': querySelectOpen}">
-                    <a class="query-option query-all" @click="$emit('selectQuery', 'all')">All</a>
-                    <a class="query-option query-shortlisted" @click="$emit('selectQuery', 'shortlisted')">Shortlisted</a>
-                    <a class="query-option query-applied" @click="$emit('selectQuery', 'applied')">Applied</a>
-                </nav>
             </div>
             <div id="center">
                 <div class="menu-item" id="search_wrap">
@@ -105,6 +100,7 @@ export default {
     height: 100%;
     display: flex;
     justify-content: flex-start;
+    justify-items: center;
     align-items: center;
 }
 
@@ -123,21 +119,11 @@ export default {
     align-items: center;
 }
 
-#query-select-container {
-    height: 75%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-left: 10px;
+#title {
+    padding-left: 15px;
     color: white;
-    background-color: #203643;
-    border-radius: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-#query-select-label {
-    margin-right: 10px;
+    font-size: 28pt;
+    font-family: 'Barlow Regular';
 }
 
 #search_wrap {
@@ -183,36 +169,5 @@ export default {
 #start-fresh-btn {
     color: white;
 }
-
-.query-select-dropdown {
-    position: absolute;
-    top: 100%;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
-    width: 15vw;
-    height: 15vh;
-    transform: scaleY(0);
-    transform-origin: top center;
-    transition-duration: 150ms;
-}
-
-.query-select-open {
-    transform: scaleY(1);
-    transform-origin: top center;
-}
-
-.query-option {
-    user-select: none;
-    background-color: black;
-    color: white;
-    width: 80%;
-}
-
-.query-option:hover {
-    background-color: rgb(44, 42, 42);
-}
-
 
 </style>

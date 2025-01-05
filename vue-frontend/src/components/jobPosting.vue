@@ -1,7 +1,7 @@
 <template>
     <div class="postingContainer" :class="{expanded: isSelected, shortlisted: shortlisted}" @click="isSelected = !isSelected">
         <li class="jobPosting" :class="{addDescToGrid: isSelected}">
-            <h2 id="title" class="title info">{{ title }}</h2>
+            <h2 class="title info">{{ title }}</h2>
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
             <div class="job-actions">
@@ -136,14 +136,9 @@ export default {
         height: 550px;
     }
 
-    #title {
-        color: transparent;
-        background: rgba(243, 242, 229, 0.897);
-        background-clip: text;
-    }
-
     .title {
         font-family: Barlow Regular;
+        color: white;
         font-size: 20pt;
         height: 100%;
         text-align: left;

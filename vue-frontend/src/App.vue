@@ -1,6 +1,16 @@
 <template>
 	<div id="main">
-		<menuBar id="menu" @update-keywords="newKeywords" @selectQuery="newQuerySelected"></menuBar>
+		<menuBar id="menu" @update-keywords="newKeywords" @selectQuery="filterQuery"></menuBar>
+		<div class="filter-container">
+			<div class="filter-menu">
+				<a class="filter-option filter-all">All</a>
+				<input type="checkbox" style="margin-left: 5px;">
+				<a class="filter-option filter-shortlisted" style="margin-left: 10px;">Shortlisted</a>
+				<input type="checkbox" style="margin-left: 5px;">
+				<a class="filter-option filter-applied" style="margin-left: 10px;">Applied To</a>
+				<input type="checkbox" style="margin-left: 5px;">
+			</div>
+		</div>
 		<div id="listContainer">
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
 				<jobPosting @refresh="simpleRefresh()" :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description" :shortlisted="job.shortlisted">
@@ -41,8 +51,8 @@ export default {
 	data() {
 		return {
 			shortlistedJobsQ: gql`
-			query getShortlisted($first: Int, $skip: Int, $keywordSet: String){
-				shortlistedJobs(first: $first , skip: $skip, keywordSet: $keywordSet ){
+			query getShortlisted($first: Int, $skip: Int, $keywordStr: String){
+				shortlistedJobs(first: $first , skip: $skip, keywordStr: $keywordStr ){
 					id
 					title
 					companyName
@@ -57,15 +67,17 @@ export default {
 
 	setup() {
 		const jobsPerPage = ref(20)
-		const keywordSet = ref("")
+		const keywordStr = ref("")
 		const offset = ref(0)
 		const pageNum = ref(1)
 		const jobs = ref([])
 		const selectedJob = ref({})
+		const shortlisted = ref(false)
+		const applied = ref(false)
 
-		const allJobsQ = ref(gql`
-		query getJobs($first: Int, $skip: Int, $keywordSet: String){
-			jobsByDateAdded(first: $first , skip: $skip, keywordSet: $keywordSet ){
+		const jobsQuery = ref(gql`
+		query jobs($first: Int, $skip: Int, $filterParams: FilterParamsType){
+			jobs(first: $first , skip: $skip, filterParams: $filterParams ){
 				id
 				title
 				companyName
@@ -78,17 +90,21 @@ export default {
 		}`)
 
 		provideApolloClient(client)
-		const { result, fetchMore, refetch } = useQuery(allJobsQ,
+		const { result, fetchMore, refetch } = useQuery(jobsQuery,
 			{
 				first: jobsPerPage.value,
 				skip: offset.value,
-				keywordSet: keywordSet.value
+				filterParams: {
+					shortlisted: shortlisted,
+					applied: applied,
+					keywordStr: keywordStr
+				}
 			}
 		)
 
 		watch(result, (newResult) => {
-			if (newResult && newResult.jobsByDateAdded) {
-				jobs.value = newResult.jobsByDateAdded
+			if (newResult && newResult.jobs) {
+				jobs.value = newResult.jobs
 			}
 		})
 
@@ -107,12 +123,17 @@ export default {
 			}
 			fetchMore({
 				variables: {
-					skip: offset.value
+					skip: offset.value,
+					filterParams: {
+						shortlisted: shortlisted.value,
+						applied: applied.value,
+						keywordStr: keywordStr.value
+					}
 				},
 				updateQuery: (result, {fetchMoreResult}) => {
 					if(!fetchMoreResult) return result
 					
-					jobs.value = fetchMoreResult.jobsByDateAdded
+					jobs.value = fetchMoreResult.jobs
 				}
 			})
 
@@ -121,11 +142,16 @@ export default {
 		const newKeywords = async (keywords) => {
 			offset.value = 0;
 			pageNum.value = 1;
-			keywordSet.value = keywords;
+			keywordStr.value = keywords;
+
 			refetch({
 				first: jobsPerPage.value,
 				skip: offset.value,
-				keywordSet: keywordSet.value
+				filterParams: {
+					shortlisted: shortlisted.value,
+					applied: applied.value,
+					keywordStr: keywordStr.value
+				}
 			})
 		}
 
@@ -133,7 +159,11 @@ export default {
 			refetch({
 				first: jobsPerPage.value,
 				skip: offset.value,
-				keywordSet: keywordSet.value
+				filterParams: {
+					shortlisted: shortlisted.value,
+					applied: applied.value,
+					keywordStr: keywordStr.value
+				}
 			})
 		}
 
@@ -144,42 +174,32 @@ export default {
 			jobsPerPage,
 			pageNum,
 			nextPage,
+			keywordStr,
+			applied,
+			shortlisted,
 			newKeywords,
 			selectedJob,
 			refetch,
 			simpleRefresh,
-			allJobsQ
+			jobsQuery
 		}
 	},
 
 	methods: {
-		newQuerySelected(qname) {	
+		filterQuery(paramUpdate) {	
 
-			if(qname == "all") {
-				const {result, loading} = useQuery(this.allJobsQ, {
-						first: this.jobsPerPage,
-						skip: this.offset,
-						keywordSet: ""
-					}
-				)
-				if(!loading) {
-					console.log(result)
-				}
-			} else if(qname == "shortlisted") {
+			if(paramUpdate == "all") {
+				console.log("Implement this option - remove all filters")
+			} else if(paramUpdate == "shortlisted") {
 
-				const {result} = useQuery(this.shortlistedJobsQ, {
-						first: this.jobsPerPage,
-						skip: this.offset,
-						keywordSet: ""
-					}
-				)
+				this.shortlisted = true
+				this.applied = false
+				this.simpleRefresh()
 
-				console.log(result)
-				// this.jobs = result.shortlistedJobs
-				// console.log(this.jobs)
-
-			} else if(qname == "applied") {
-				console.log("Fetching applied jobs")
+			} else if(paramUpdate == "applied") {
+				this.applied = true
+				this.shortlisted = false
+				this.simpleRefresh()
 			}
 
 		}
@@ -204,19 +224,46 @@ export default {
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 8%;
+		height: 5vh;
+		min-height: 45px;
+		max-height: 70px;
+	}
+
+	.filter-container {
+		position: absolute;
+		top: 5vh;
+		height: 5vh;
+		width: 100%;
+		background-color: rgb(17 25 37);
+		display: flex;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+	}
+
+	.filter-option {
+		height: 100%;
+		font-family: 'Barlow Regular';
+		font-size: 14pt;
+		align-content: center;
+		margin: auto;
+		color: white;
 	}
 
 	#listContainer {
 		position: absolute;
-		top: 8%;
-		height: 86%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		top: 10vh;
+		height: 85vh;
 		width: 100%;
 		overflow-y: scroll;
 		background-color: rgb(17 25 37);
 	}
 
 	#joblist {
+		height: 80%;
 		width: 40%;
 		padding: 0;
 		margin: auto;
@@ -226,8 +273,8 @@ export default {
 
 	#resultsNav {
 		position: absolute;
-		top: 94%;
-		height: 6%;
+		top: 95vh;
+		height: 5vh;
 		width: 100%;
 		display: flex;
 		align-items: center;
