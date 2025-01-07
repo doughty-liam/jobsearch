@@ -35,8 +35,8 @@ class JobPuller():
         jobs = []
         next_page_token = ""
 
-        for page in range(0, 100, 10):
-            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=data&location=Toronto&lrad=200&uds=ADvngMjcH0KdF7qGWtwTBrP0nt7d-93B-GLP_EZaqE4a9Xz_M8SJih1fftEvjbhMENwwVd5tsAkcnjKc9b8aleTghZdybJ0LnSFyBQoGQjjxkxT97QLf0SAMA8pbHPeSlqDU4C-vBgGVZFwoFIFRkT9xOVCWY7wt1GIcTpahI-LOapkDA18Bw0WGBkCCcl_3F6tuQYsB8osTWyL9msBSuTbQzcGoqhN-4nF_jv9Xt7D5Zzw6iIulf0bzumFiEB5721oxKDL336rL3StBEjPsP6MYt_KtqSPse7xAGnfu4SaymEzmqqH_ONO402sH5Iba_KEsdiLUsgOp&api_key={SERP_KEY}{next_page_token}")
+        for page in range(0, 150, 10):
+            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=analyst&location=Toronto&lrad=200&uds=ADvngMjcH0KdF7qGWtwTBrP0nt7d-93B-GLP_EZaqE4a9Xz_M8SJih1fftEvjbhMENwwVd5tsAkcnjKc9b8aleTghZdybJ0LnSFyBQoGQjjxkxT97QLf0SAMA8pbHPeSlqDU4C-vBgGVZFwoFIFRkT9xOVCWY7wt1GIcTpahI-LOapkDA18Bw0WGBkCCcl_3F6tuQYsB8osTWyL9msBSuTbQzcGoqhN-4nF_jv9Xt7D5Zzw6iIulf0bzumFiEB5721oxKDL336rL3StBEjPsP6MYt_KtqSPse7xAGnfu4SaymEzmqqH_ONO402sH5Iba_KEsdiLUsgOp&api_key={SERP_KEY}{next_page_token}")
             # Checking if no more search results were returned
             if "error" not in raw.json().keys():
                 results = raw.json()
@@ -67,8 +67,10 @@ class JobPuller():
     def clean(self, data:str) -> pd.DataFrame:
         """Clean up job listings in json string format to be appended to database table."""
         
-        jobs = pd.read_json(data)        
-        apply_options = jobs["apply_options"].apply(pd.Series)
+        jobs = pd.read_json(data)   
+        if("apply_options" in jobs.keys()):     
+            apply_options = jobs["apply_options"].apply(pd.Series)
+
         application_links = []
 
         for job in jobs["apply_options"]: # Each element is a list of objects
@@ -85,10 +87,11 @@ class JobPuller():
                     application_links.append("Unknown") # No external link provided
         
         
-        apply_options = pd.Series(application_links, name="Link") # Converting "link" and "text" series back to df
+        apply_options = pd.Series(application_links, name="link") # Converting "link" and "text" series back to df
         jobs_clean = pd.concat([jobs, apply_options], axis=1)
-        jobs_clean = jobs_clean[["title", "company_name", "location", "description", "Link"]] # Select only required columns
+        jobs_clean = jobs_clean[["title", "company_name", "location", "description", "link"]] # Select only required columns
         jobs_clean["date_added"] = dt.date(dt.now())
+        jobs_clean["shortlisted"] = False
         jobs_clean["applied"] = False
         return jobs_clean
 
@@ -109,21 +112,8 @@ class JobPuller():
         connection = engine.connect()
         
         jobs_jstr = self.collect_jobs()
+
         jobs_df = self.clean(jobs_jstr)
-
-        '''
-        descriptions = jobs_df[["description"]].to_numpy()
-        temp = []
-
-        
-        for description in descriptions:
-            temp.append(find_similarity(resume_text, description[0]))
-
-        similarity_rating = pd.Series(temp)
-
-        jobs_df.insert(6, "similarity_rating", similarity_rating)
-        '''
-
         jobs_df.to_sql("jobs_job", con=engine, index=False, if_exists="append")
 
         connection.close()
