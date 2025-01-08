@@ -2,16 +2,16 @@
 	<div id="main">
 		<menuBar id="menu" @update-keywords="newKeywords" @selectQuery="filterQuery"></menuBar>
 		<div class="filter-container">
+			<!-- This should be its own filter-menu -->
 			<div class="filter-menu">
-				<a class="filter-option filter-all">All</a>
-				<input type="checkbox" style="margin-left: 5px;">
-				<a class="filter-option filter-shortlisted" style="margin-left: 10px;">Shortlisted</a>
-				<input type="checkbox" style="margin-left: 5px;">
-				<a class="filter-option filter-applied" style="margin-left: 10px;">Applied To</a>
-				<input type="checkbox" style="margin-left: 5px;">
+				<a class="filter-option filter-shortlisted" style="margin-left: 10px;">shortlisted</a>
+				<input type="checkbox" style="margin-left: 5px;" v-model="shortlisted">
+				<a class="filter-option filter-applied" style="margin-left: 10px;">applied</a>
+				<input type="checkbox" style="margin-left: 5px;" v-model="applied">
 			</div>
 		</div>
 		<div id="listContainer">
+			<div v-if="loading" class="loader"></div>
 			<ul v-for="job in jobs" :key="job.id" id="joblist">
 				<jobPosting @refresh="simpleRefresh()" :title="job.title" :location="job.location" :company="job.companyName" :id="job.id" :applied="job.applied"  :link="job.link" :description="job.description" :shortlisted="job.shortlisted">
 				</jobPosting>
@@ -90,7 +90,7 @@ export default {
 		}`)
 
 		provideApolloClient(client)
-		const { result, fetchMore, refetch } = useQuery(jobsQuery,
+		const { result, fetchMore, loading, refetch } = useQuery(jobsQuery,
 			{
 				first: jobsPerPage.value,
 				skip: offset.value,
@@ -181,29 +181,10 @@ export default {
 			selectedJob,
 			refetch,
 			simpleRefresh,
-			jobsQuery
+			jobsQuery,
+			loading
 		}
 	},
-
-	methods: {
-		filterQuery(paramUpdate) {	
-
-			if(paramUpdate == "all") {
-				console.log("Implement this option - remove all filters")
-			} else if(paramUpdate == "shortlisted") {
-
-				this.shortlisted = true
-				this.applied = false
-				this.simpleRefresh()
-
-			} else if(paramUpdate == "applied") {
-				this.applied = true
-				this.shortlisted = false
-				this.simpleRefresh()
-			}
-
-		}
-	}
 }
 
 </script>
@@ -260,6 +241,21 @@ export default {
 		width: 100%;
 		overflow-y: scroll;
 		background-color: rgb(17 25 37);
+	}
+	
+	.loader {
+		border: 16px solid #f3f3f3; /* Light grey */
+		border-top: 16px solid #226694; /* Blue */
+		border-radius: 50%;
+		margin: auto;
+		width: 100px;
+		height: 100px;
+		animation: spin 2s linear infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
 	}
 
 	#joblist {

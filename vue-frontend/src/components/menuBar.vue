@@ -3,7 +3,7 @@
         <div id="menubar">
             <div id="left">
                 <div id="title">
-                    <font-awesome-icon icon="briefcase" size="x0.5" style="padding-right: 15px; color: rgb(81, 130, 155)"/>
+                    <font-awesome-icon icon="briefcase" style="padding-right: 15px; color: rgb(81, 130, 155)"/>
                     job finder
                 </div>
             </div>

@@ -90,11 +90,9 @@ class Query(graphene.ObjectType):
 
     def resolve_jobs(root, info, first, skip, filterParams):
         
-        # Vars will be a dictionary containing the filter/sort parameters
-
-        shortlisted_q = Q(shortlisted=filterParams.shortlisted)
-        applied_q = Q(applied=filterParams.applied)
-
+        # filterParams will be a dictionary containing the filter/sort parameters
+        shortlisted_q = Q(shortlisted=True)
+        applied_q = Q(applied=True)
         
         # Processing provided search keywords
         keyword_strs = filterParams.keyword_str.split(",")
@@ -102,7 +100,12 @@ class Query(graphene.ObjectType):
         for word in keyword_strs:
             keyword_qset &= Q(description__contains=word)
 
-        filter_qset = shortlisted_q & applied_q & keyword_qset
+        filter_qset = keyword_qset
+        if(filterParams.shortlisted):
+            filter_qset = filter_qset & shortlisted_q
+        
+        if(filterParams.applied):
+            filter_qset = filter_qset & applied_q
 
         qs = Job.objects.order_by('-date_added').filter(filter_qset)
 
