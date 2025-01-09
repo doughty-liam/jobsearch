@@ -250,7 +250,7 @@ export default {
 		margin: auto;
 		width: 100px;
 		height: 100px;
-		animation: spin 2s linear infinite;
+		animation: spin 1s linear infinite;
 	}
 
 	@keyframes spin {
@@ -288,11 +288,10 @@ export default {
 		font-family: Barlow Regular;
 		height: 100%;
 		width: 30%;
-		margin: auto;
 		align-content: center;
-		padding-top: 2%;
 		text-align: center;
-		font-size: 16pt;
+		font-size: 18pt;
+		line-height: 100%;
 		color: rgb(217, 217, 217);
 	}
 
@@ -302,8 +301,7 @@ export default {
 		width: 40px;
 		border: none;
 		font-size: 30pt;
-		height: 100%;
-		margin-bottom: 5px;
+		height: 90%;
 		
 	}
 

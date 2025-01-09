@@ -5,9 +5,9 @@
             <div class="company info">{{ company }}</div>
             <div class="location info">{{ location }}</div>
             <div class="job-actions">
-                <button class="action-btn" @click.stop="shortlistRefresh({id})">{{ shortlisted ? "unshortlist" : "shortlist" }}</button>
-                <button class="action-btn" @click.stop>applied</button>
-                <button id="apply_link" class="action-btn" :href="link" @click.stop>apply</button>
+                <button class="action-btn" @click.stop="shortlistRefresh(id)">{{ shortlisted ? "unshortlist" : "shortlist" }}</button>
+                <button class="action-btn" @click.stop="appliedRefresh(id)">applied</button>
+                <button id="apply_link" class="action-btn" @click.stop @click="openApplicationSite">apply</button>
             </div>
             <transition>
                 <pre id="descriptionText" v-if="isSelected">{{ description }}</pre>
@@ -55,7 +55,7 @@ export default {
         
         provideApolloClient(client)
 
-        const q = gql`
+        const shortlistMutation = gql`
         mutation shortlistMutation($jobid: Int) {
             shortlistJob(jobid: $jobid){
                 id
@@ -64,27 +64,49 @@ export default {
             }
         }`
 
-        const {mutate: shortlistJob, onDone} = useMutation(q)
+        const appliedMutation = gql`
+        mutation markApplied($jobid: Int) {
+            applyToJob(jobid: $jobid) {
+                id
+                title
+                applied
+            }
+        }`
+
+        const {mutate: shortlistJob, onDone: shortlistingDone} = useMutation(shortlistMutation)
+        const {mutate: markApplied, onDone: appliedDone} = useMutation(appliedMutation)
 
         return {
             shortlistJob,
-            onDone
+            markApplied,
+            shortlistingDone,
+            appliedDone
         }
     },
 
     methods: {
         shortlistRefresh(jobid) {
+            this.shortlistJob({
+                jobid: Number(jobid) // Pass jobid directly
+            });
 
-            this.shortlistJob(
-                {
-                    jobid: Number(jobid.id)
-                }
-            )
-            
-            
-            this.onDone(() => {
-                this.$emit("refresh")
-            })
+            this.shortlistingDone(() => {
+                this.$emit("refresh");
+            });
+        },
+
+        appliedRefresh(jobid) {
+            this.markApplied({
+                jobid: Number(jobid) // Pass jobid directly
+            });
+
+            this.appliedDone(() => {
+                this.$emit("refresh");
+            });
+        },
+
+        openApplicationSite() {
+            window.open(this.link);
         }
     }
 }

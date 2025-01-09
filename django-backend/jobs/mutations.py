@@ -15,9 +15,9 @@ class job_applied(graphene.Mutation):
     class Arguments:
         jobid = graphene.Int()
 
-    def mutate(cls, info, jobid):
+    def mutate(root, info, jobid):
         job = Job.objects.get(id=jobid)
-        job.applied = True
+        job.applied = not job.applied
         job.save()
 
         return job_applied(id=job.id, title=job.title, applied=job.applied)
@@ -32,7 +32,7 @@ class job_shortlist(graphene.Mutation):
     class Arguments:
         jobid = graphene.Int()
 
-    def mutate(cls, info, jobid):
+    def mutate(root, info, jobid):
         job = Job.objects.get(id=jobid)
         job.shortlisted = not job.shortlisted
         job.save()
