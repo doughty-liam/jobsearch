@@ -36,7 +36,7 @@ class JobPuller():
         next_page_token = ""
 
         for page in range(0, 150, 10):
-            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=analyst&location=Toronto&lrad=200&uds=ADvngMjcH0KdF7qGWtwTBrP0nt7d-93B-GLP_EZaqE4a9Xz_M8SJih1fftEvjbhMENwwVd5tsAkcnjKc9b8aleTghZdybJ0LnSFyBQoGQjjxkxT97QLf0SAMA8pbHPeSlqDU4C-vBgGVZFwoFIFRkT9xOVCWY7wt1GIcTpahI-LOapkDA18Bw0WGBkCCcl_3F6tuQYsB8osTWyL9msBSuTbQzcGoqhN-4nF_jv9Xt7D5Zzw6iIulf0bzumFiEB5721oxKDL336rL3StBEjPsP6MYt_KtqSPse7xAGnfu4SaymEzmqqH_ONO402sH5Iba_KEsdiLUsgOp&api_key={SERP_KEY}{next_page_token}")
+            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=analyst&location=Toronto&lrad=200&uds=ADvngMjcH0KdF7qGWtwTBrP0nt7dUf74haQ-z1KyQ4X0ZYM2l0Fl0ekdWzfk_NFIc6TrymMS2sYqGCwXZdGpwIFcSTkgBpTrL6G7DOQZKhYUuyq7zRgDSfgS5Wkm2vX5RNLDYyc7d-bhTN8gkXqOo3gzYEWc_WPFPDS8X2sqAmQP9m9tdmLzQre40wOD6PKojNtgZd3q2B2-r38JUSyuDQEAYWCBWYRTrqATWCEiXQdxBRrATZUG59f7MLUU4SsEcCMZo6e0MJnMcKBT0HuhbqPehWgSyIe5t12dtUVj2jiJu_TZcpsZ_qfuCnwdkGJVxnFosaH9s8jQL0U27N8HvCkuBlXpUYQHVg&api_key={SERP_KEY}{next_page_token}")
             # Checking if no more search results were returned
             if "error" not in raw.json().keys():
                 results = raw.json()
@@ -93,6 +93,11 @@ class JobPuller():
         jobs_clean["date_added"] = dt.date(dt.now())
         jobs_clean["shortlisted"] = False
         jobs_clean["applied"] = False
+
+        # Replacing any missing values to avoid NOT NULL constraint errors with SQLITE
+        blank_replacements = {"title": "unknown", "company_name": "unknown", "description":"unknown", "link":"unknown"}
+        jobs_clean = jobs_clean.fillna(value=blank_replacements)
+
         return jobs_clean
 
 
@@ -108,7 +113,7 @@ class JobPuller():
 
     def getJobs(self) -> None:
         
-        engine = sqla.create_engine("sqlite:///db.sqlite3")
+        engine = sqla.create_engine(r"sqlite:///C:\Users\liam\OneDrive\Documents\python projects\jobs\jobsearch\django-backend\db.sqlite3")
         connection = engine.connect()
         
         jobs_jstr = self.collect_jobs()

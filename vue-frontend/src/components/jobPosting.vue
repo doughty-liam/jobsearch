@@ -7,6 +7,7 @@
             <div class="job-actions">
                 <button class="action-btn" @click.stop="shortlistRefresh(id)">{{ shortlisted ? "unshortlist" : "shortlist" }}</button>
                 <button class="action-btn" @click.stop="appliedRefresh(id)">applied</button>
+                <button class="action-btn" @click.stop="deleteRefresh(id)">delete</button>
                 <button id="apply_link" class="action-btn" @click.stop @click="openApplicationSite">apply</button>
             </div>
             <transition>
@@ -73,13 +74,23 @@ export default {
             }
         }`
 
+        const deleteMutation = gql`
+        mutation deleteJob($jobid: Int) {
+            deleteJob(jobid: $jobid) {
+                id
+            }
+        }`
+
         const {mutate: shortlistJob, onDone: shortlistingDone} = useMutation(shortlistMutation)
         const {mutate: markApplied, onDone: appliedDone} = useMutation(appliedMutation)
+        const {mutate: deleteJob, onDone: deletionDone} = useMutation(deleteMutation)
 
         return {
             shortlistJob,
             markApplied,
             shortlistingDone,
+            deleteJob,
+            deletionDone,
             appliedDone
         }
     },
@@ -105,9 +116,21 @@ export default {
             });
         },
 
+        // Might want to add some 'are you sure?' popup for this operation
+        deleteRefresh(jobid) {
+            this.deleteJob({
+                jobid: Number(jobid)
+            })
+
+            this.deletionDone(() => {
+                this.$emit("refresh")
+            })
+        },
+
         openApplicationSite() {
             window.open(this.link);
-        }
+        },
+
     }
 }
 

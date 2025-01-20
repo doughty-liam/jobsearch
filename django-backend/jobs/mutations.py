@@ -38,8 +38,23 @@ class job_shortlist(graphene.Mutation):
         job.save()
 
         return job_shortlist(id=job.id, title=job.title, shortlisted=job.shortlisted)
+    
+class job_delete(graphene.Mutation):
+    
+    id = graphene.Int()
+
+    class Arguments:
+        jobid = graphene.Int()
+
+    def mutate(root, info, jobid):
+        job = Job.objects.get(id=jobid)
+        job.delete()
+
+        return job_delete(id=jobid)
+    
 
     
 class Mutation(graphene.ObjectType):
     applyToJob = job_applied.Field()
     shortlistJob = job_shortlist.Field()
+    deleteJob = job_delete.Field()

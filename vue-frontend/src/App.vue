@@ -1,6 +1,6 @@
 <template>
 	<div id="main">
-		<menuBar id="menu" @update-keywords="newKeywords" @selectQuery="filterQuery"></menuBar>
+		<menuBar id="menu" @refresh="simpleRefresh()" @update-keywords="newKeywords" @selectQuery="filterQuery"></menuBar>
 		<div class="filter-container">
 			<!-- This should be its own filter-menu -->
 			<div class="filter-menu">

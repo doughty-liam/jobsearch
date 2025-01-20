@@ -47,8 +47,11 @@ export default {
             }`;
             provideApolloClient(client);
 
-            const {result} = useQuery(q);
-            console.log(result);
+            const {onResult: jobsCollected} = useQuery(q);
+            
+            jobsCollected(() => {
+                this.$emit("refresh")
+            })
 
         }
     }
