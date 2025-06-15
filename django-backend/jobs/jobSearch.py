@@ -36,7 +36,7 @@ class JobPuller():
         next_page_token = ""
 
         for page in range(0, 150, 10):
-            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=analyst&location=Toronto&lrad=200&uds=ADvngMjcH0KdF7qGWtwTBrP0nt7dUf74haQ-z1KyQ4X0ZYM2l0Fl0ekdWzfk_NFIc6TrymMS2sYqGCwXZdGpwIFcSTkgBpTrL6G7DOQZKhYUuyq7zRgDSfgS5Wkm2vX5RNLDYyc7d-bhTN8gkXqOo3gzYEWc_WPFPDS8X2sqAmQP9m9tdmLzQre40wOD6PKojNtgZd3q2B2-r38JUSyuDQEAYWCBWYRTrqATWCEiXQdxBRrATZUG59f7MLUU4SsEcCMZo6e0MJnMcKBT0HuhbqPehWgSyIe5t12dtUVj2jiJu_TZcpsZ_qfuCnwdkGJVxnFosaH9s8jQL0U27N8HvCkuBlXpUYQHVg&api_key={SERP_KEY}{next_page_token}")
+            raw = re.get(f"https://serpapi.com/search.json?engine=google_jobs&q=analyst&location=Toronto&lrad=200&api_key={SERP_KEY}{next_page_token}")
             # Checking if no more search results were returned
             if "error" not in raw.json().keys():
                 results = raw.json()
